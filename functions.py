@@ -1,3 +1,4 @@
+import csv
 import psycopg2
 
 #config for login to psql
