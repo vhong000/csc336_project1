@@ -1,6 +1,8 @@
 # csc336_project1
 project 1 for csc336 Fall 2018
 
+create a branch from this repo and make changes in that until ready to merge with master.
+
 ## Git commands
 
 `git checkout <user branch>`
