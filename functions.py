@@ -222,7 +222,7 @@ def fill_games():
         reader = csv.reader(games)
         next(games)
         for row in reader:
-            cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, '')",
+            cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     row
                     )
     cur.close()
@@ -239,7 +239,7 @@ def fill_members():
     cur.close()
 
 #create_game_table();
-#fill_games();
+fill_games();
 
 #create_member_table();
 #fill_members();

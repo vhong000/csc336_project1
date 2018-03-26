@@ -20,7 +20,10 @@ publishers = ['Nintendo', 'Ubisoft', 'Electronic Arts', 'Sony', 'Square Enix', '
 genres = ['Action-Adventure', 'Action', 'Adventure', 'Card Battle', 'Casual', 'Puzzle', 'Rhythm', 'Role-Playing', 'Simulation', 'Strategy', 'Racing']
 
 # list of games
-title = ['Counter-Strike', 'Dota 2', 'League of Legends', 'FIFA', 'Grand Theft Auto', 'Rocket League', 'PubG', 'Burnout', 'Pokemon', 'Pong', 'Space Invaders', 'Pac-man', 'Donkey Kong', 'Frogger', 'Tetris', 'Super Mario Bros.', 'The Legend of Zelda', 'Contra', 'Mike Tyson\'s Punch-Out!!', 'Mega Man 2', 'Wolfenstein 3D', 'Super Mario Kart', 'EarthBound', 'Chrono Trigger', 'Super Mario 64', 'BioShock', 'Portal', 'Red Dead Redemption', 'Super Meat Boy', 'Dark Souls', 'Bloodborne', 'The Witcher', 'Deus Ex', 'EverQuest', 'StarCraft', 'Half-Life', 'GoldenEye 007']
+titles = ['Counter-Strike', 'Dota 2', 'League of Legends', 'FIFA', 'Grand Theft Auto', 'Rocket League', 'PubG', 'Burnout', 'Pokemon', 'Pong', 'Space Invaders', 'Pac-man', 'Donkey Kong', 'Frogger', 'Tetris', 'Super Mario Bros.', 'The Legend of Zelda', 'Contra', 'Mike Tyson\'s Punch-Out!!', 'Mega Man 2', 'Wolfenstein 3D', 'Super Mario Kart', 'EarthBound', 'Chrono Trigger', 'Super Mario 64', 'BioShock', 'Portal', 'Red Dead Redemption', 'Super Meat Boy', 'Dark Souls', 'Bloodborne', 'The Witcher', 'Deus Ex', 'EverQuest', 'StarCraft', 'Half-Life', 'GoldenEye 007']
+
+# list of descriptions
+descriptions = ['Wow what a great game!!', 'A damn good game right here', 'It\'s ok', 'Cool game full of action', 'Eyy that\'s pretty good', 'Wow Mario can jump really high!!', 'Most horrifying game of the year', 'Best seller in 5 states', 'Next level realism', 'Revolutionary game mechanics']
 
 # create csv file
 download_dir = "game_data.csv"
@@ -36,6 +39,7 @@ for x in range(100):
    rand_developer = developers[random.randint(0, len(developers)-1)];
    rand_publisher = publishers[random.randint(0, len(publishers)-1)];
    rand_genre = genres[random.randint(0, len(genres)-1)];
-   rand_title = title[random.randint(0, len(title)-1)];
-   row = str(x) + "," + rand_title + ',' + str(rand_year) + ',' + rand_developer + ',' + rand_publisher + ',' + rand_rating + ',' + rand_genre + ',' + str(rand_price) + "\n"
+   rand_title = titles[random.randint(0, len(titles)-1)];
+   rand_desc = descriptions[random.randint(0, len(descriptions)-1)];
+   row = str(x) + "," + rand_title + ',' + str(rand_year) + ',' + rand_developer + ',' + rand_publisher + ',' + rand_rating + ',' + rand_genre + ',' + str(rand_price) + ',' + rand_desc + "\n"
    csv.write(row)
