@@ -47,7 +47,7 @@ def create_game_table():
         print "didn't execute"
     print("table game created")
     cur.close()
-	        
+
 def create_member_table():
     cur = conn.cursor()
     query = ("""CREATE TABLE member (
@@ -63,7 +63,7 @@ def create_member_table():
     cur.execute(query)
     print("table member created")
     cur.close()
-	        
+
 def create_shopping_cart_table():
     cur = conn.cursor()
     query = ("""CREATE TABLE shopping_cart (
@@ -238,8 +238,28 @@ def fill_members():
             )
     cur.close()
 
+#functions to retrive values from the database
+def select_all_from_table(table):
+    cur = conn.cursor()
+    query = ("""Select * from %s""" %(table))
+    cur.execute(query)
+    conn.commit()
+    #for tuple in cursor:
+    #    print(f"{tuple}")
+    return cur
+
+def select_from_table(table, attribute, value):
+    cur = conn.cursor()
+    query = ("Select * from %s where %s='%s'" %(table, attribute, value))
+    cur.execute(query)
+    conn.commit()
+    #for tuple in cur:
+    #    print("{tuple}")
+    return cur
+
 #create_game_table();
-fill_games();
+#fill_games();
+#select_from_table('game', 'title', 'FIFA');
 
 #create_member_table();
 #fill_members();
