@@ -3,10 +3,8 @@ import psycopg2
 
 #config for login to psql
 config = {
-    "user": 'postgres',
-    "password": 'o1o2o3o4',
-    "host": '127.0.0.1',
-    "database": 'postgres'
+    "user": 'victor',
+    "database": 'pipesoftdb'
 }
 
 #connect and get cursor
@@ -250,16 +248,28 @@ def fill_games():
 	cur.close()
 
 def fill_members():
-	cur = conn.cursor()
-	with open('member_data.csv', 'r') as members:
-		reader = csv.reader(members)
-		next(members)
-		for row in reader:
-			cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
-			row
-			)
-	conn.commit()
-	cur.close()
+    cur = conn.cursor()
+    with open('member_data.csv', 'r') as members:
+        reader = csv.reader(members)
+        next(members)
+        for row in reader:
+            cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
+            row
+            )
+    conn.commit()
+    cur.close()
+
+def fill_requirements():
+    cur = conn.cursor()
+    with open('req_data.csv', 'r') as reqs:
+        reader = csv.reader(reqs)
+        next(reqs)
+        for row in reader:
+            cur.execute("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES (%s, %s, %s, %s)",
+            row
+            )
+    conn.commit()
+    cur.close()
 
 #functions to retrive values from the database
 def select_all_from_table(table):
@@ -275,3 +285,6 @@ def select_from_table(table, attribute, value):
     cur.execute(query)
     conn.commit()
     return cur
+
+create_requirements_table();
+fill_requirements();
