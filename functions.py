@@ -9,7 +9,7 @@ config = {
 
 #connect and get cursor
 #try:
-conn = psycopg2.connect("user='victor' dbname='pipesoftdb' password=''")
+conn = psycopg2.connect(**config)
 #except:
 #    print "I am unable to connect to the database"
 #try: 
@@ -25,6 +25,7 @@ def drop_table(table):
     query = ("Drop table %s" %(table))
     cur.execute(query)
     print("table %s dropped" %(table))
+    conn.commit()
     cur.close()
 
 def create_game_table():
@@ -44,8 +45,9 @@ def create_game_table():
     try:
         cur.execute(query)
     except: 
-        print "didn't execute"
+        print("didn't execute")
     print("table game created")
+    conn.commit()
     cur.close()
 
 def create_member_table():
@@ -62,6 +64,7 @@ def create_member_table():
         );""")
     cur.execute(query)
     print("table member created")
+    conn.commit()
     cur.close()
 
 def create_shopping_cart_table():
@@ -77,6 +80,7 @@ def create_shopping_cart_table():
         );""")
     cur.execute(query)
     print("table shopping_cart created")
+    conn.commit()
     cur.close()
 
 def create_admin_table():
@@ -92,6 +96,7 @@ def create_admin_table():
         );""")
     cur.execute(query)
     print("table admin created")
+    conn.commit()
     cur.close()
 
 def create_poster_table():
@@ -105,6 +110,7 @@ def create_poster_table():
         );""")
     cur.execute(query)
     print("table poster created")
+    conn.commit()
     cur.close()
 
 def create_friends_table():
@@ -119,6 +125,7 @@ def create_friends_table():
                     );""")
     cur.execute(query)
     print("table friends created")
+    conn.commit()
     cur.close()
 
 def create_reviews_table():
@@ -136,6 +143,7 @@ def create_reviews_table():
         );""")
     cur.execute(query)
     print("table reviews created")
+    conn.commit()
     cur.close()
 
 def create_requirements_table():
@@ -151,6 +159,7 @@ def create_requirements_table():
         );""")
     cur.execute(query)
     print("table requirements created")
+    conn.commit()
     cur.close()
 
 def add_game(game_id,title,year,developer,publisher,rating,genre,price,description):
@@ -225,6 +234,7 @@ def fill_games():
             cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     row
                     )
+    conn.commit()
     cur.close()
 
 def fill_members():
@@ -236,6 +246,7 @@ def fill_members():
             cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
             row
             )
+    conn.commit()
     cur.close()
 
 #functions to retrive values from the database
@@ -244,8 +255,6 @@ def select_all_from_table(table):
     query = ("""Select * from %s""" %(table))
     cur.execute(query)
     conn.commit()
-    #for tuple in cursor:
-    #    print(f"{tuple}")
     return cur
 
 def select_from_table(table, attribute, value):
@@ -253,8 +262,6 @@ def select_from_table(table, attribute, value):
     query = ("Select * from %s where %s='%s'" %(table, attribute, value))
     cur.execute(query)
     conn.commit()
-    #for tuple in cur:
-    #    print("{tuple}")
     return cur
 
 #create_game_table();
@@ -263,4 +270,4 @@ def select_from_table(table, attribute, value):
 
 #create_member_table();
 #fill_members();
-conn.commit()
+#conn.commit()
