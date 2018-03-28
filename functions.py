@@ -1,11 +1,6 @@
 import csv
 import psycopg2
-
-#config for login to psql
-config = {
-    "user": 'victor',
-    "database": 'pipesoftdb'
-}
+from config import * 
 
 #connect and get cursor
 #try:
