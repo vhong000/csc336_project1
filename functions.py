@@ -282,5 +282,3 @@ def select_from_table(table, attribute, value):
     conn.commit()
     return cur
 
-create_requirements_table();
-fill_requirements();
