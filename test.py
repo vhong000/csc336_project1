@@ -2,25 +2,6 @@ from Tkinter import *
 from functions import *
 import psycopg2
 
-#config information for local database 
-#(*change it to fit your database)
-config = {
-    "user": 'victor',
-    "database": 'pipesoftdb'
-}
-#creating connection to the database
-conn = psycopg2.connect(**config)
-
-
-#Connects to the database and populates it with three entries
-#next line is used if table game is already in the database (only for the purpose of testing)
-#drop_table(cur, "game")
-#create_table_game(cur)
-#add_game(cur, "00000001","Subnautica","2018","Unknown Worlds","Someone","8.8","survival","19.99","None")
-#add_game(cur, "00000002","Half Life","1995","Valve","Someone","8.5","FPS","9.99","None")
-#add_game(cur, "00000003","Half Life 2","2005","Unknown Worlds","Someone","9.3","FPS","14.99","None")
-
-
 
 
 #function to search all the game with a title
@@ -34,8 +15,6 @@ def search_games():
 	for tuple in tempcur:
 		text_select.insert(INSERT, tuple)
 		text_select.insert(INSERT, "\n")
-        tempcur.close
-        text_select.config(state=DISABLED)
 
 #function to show all games in the database
 def show_games():

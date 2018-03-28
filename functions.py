@@ -3,13 +3,15 @@ import psycopg2
 
 #config for login to psql
 config = {
-                "user": 'victor',
-                "database": 'pipesoftdb'
+    "user": 'postgres',
+    "password": 'o1o2o3o4',
+    "host": '127.0.0.1',
+    "database": 'postgres'
 }
 
 #connect and get cursor
 #try:
-conn = psycopg2.connect("user='victor' dbname='pipesoftdb' password=''")
+conn = psycopg2.connect(**config)
 #except:
 #    print "I am unable to connect to the database"
 #try: 
@@ -20,16 +22,27 @@ conn = psycopg2.connect("user='victor' dbname='pipesoftdb' password=''")
 #query in each function is a string that will be passed to cursors execute() function
 #notice this does not run the query until connections commit() function is called
 
+def check_table_exists(tablename):
+		cur = conn.cursor()
+		cur.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '%s'" %(tablename))
+		if cur.fetchone()[0] == 1:
+			cur.close()
+			return True
+
+		cur.close()
+		return False
+
 def drop_table(table):
-    cur = conn.cursor()
-    query = ("Drop table %s" %(table))
-    cur.execute(query)
-    print("table %s dropped" %(table))
-    cur.close()
+	cur = conn.cursor()
+	query = ("Drop table %s" %(table))
+	cur.execute(query)
+	print("table %s dropped" %(table))
+	conn.commit()
+	cur.close()
 
 def create_game_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE game (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE game (
         game_id VARCHAR(8) NOT NULL, 
         title VARCHAR(50) NOT NULL, 
         year INT NOT NULL, 
@@ -41,16 +54,17 @@ def create_game_table():
         description VARCHAR(50),			
         PRIMARY KEY (game_id)
         );""")
-    try:
-        cur.execute(query)
-    except: 
-        print "didn't execute"
-    print("table game created")
-    cur.close()
+	try:
+		cur.execute(query)
+	except: 
+		print( "didn't execute")
+	print("table game created")
+	conn.commit()
+	cur.close()
 
 def create_member_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE member (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE member (
         member_id VARCHAR(8) NOT NULL,
         name VARCHAR(50) NOT NULL,
         age INT NOT NULL,
@@ -60,13 +74,14 @@ def create_member_table():
         
         PRIMARY KEY (member_id)
         );""")
-    cur.execute(query)
-    print("table member created")
-    cur.close()
+	cur.execute(query)
+	print("table member created")
+	conn.commit()
+	cur.close()
 
 def create_shopping_cart_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE shopping_cart (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE shopping_cart (
         member_id VARCHAR(8) NOT NULL,
         num_of_items INT,
         game_id VARCHAR(8) NOT NULL,
@@ -75,13 +90,14 @@ def create_shopping_cart_table():
         CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id),
         CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id)
         );""")
-    cur.execute(query)
-    print("table shopping_cart created")
-    cur.close()
+	cur.execute(query)
+	print("table shopping_cart created")
+	conn.commit()
+	cur.close()
 
 def create_admin_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE admin (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE admin (
         admin_id VARCHAR(8) NOT NULL,
         name VARCHAR(50) NOT NULL,
         email VARCHAR(50) NOT NULL,
@@ -90,26 +106,28 @@ def create_admin_table():
         
         PRIMARY KEY (admin_id)
         );""")
-    cur.execute(query)
-    print("table admin created")
-    cur.close()
+	cur.execute(query)
+	print("table admin created")
+	conn.commit()
+	cur.close()
 
 def create_poster_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE poster (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE poster (
         game_id VARCHAR(8) NOT NULL,
         link VARCHAR(100) NOT NULL,
         
         PRIMARY KEY(game_id),
         CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id)
         );""")
-    cur.execute(query)
-    print("table poster created")
-    cur.close()
+	cur.execute(query)
+	print("table poster created")
+	conn.commit()
+	cur.close()
 
 def create_friends_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE friends (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE friends (
         member_id VARCHAR(8) NOT NULL,
         friend_id VARCHAR(8) NOT NULL,
         
@@ -117,13 +135,14 @@ def create_friends_table():
         CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id),
         CONSTRAINT no_friend FOREIGN KEY (friend_id) REFERENCES member(member_id)
                     );""")
-    cur.execute(query)
-    print("table friends created")
-    cur.close()
+	cur.execute(query)
+	print("table friends created")
+	conn.commit()
+	cur.close()
 
 def create_reviews_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE reviews (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE reviews (
         game_id VARCHAR(8) NOT NULL,
         member_id VARCHAR(8) NOT NULL,
         score FLOAT,
@@ -134,13 +153,14 @@ def create_reviews_table():
         CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id),
         CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id)
         );""")
-    cur.execute(query)
-    print("table reviews created")
-    cur.close()
+	cur.execute(query)
+	print("table reviews created")
+	conn.commit()
+	cur.close()
 
 def create_requirements_table():
-    cur = conn.cursor()
-    query = ("""CREATE TABLE requirements (
+	cur = conn.cursor()
+	query = ("""CREATE TABLE requirements (
         game_id VARCHAR(8) NOT NULL,
         min_cpu VARCHAR(50),
         min_storage VARCHAR(50),
@@ -149,9 +169,10 @@ def create_requirements_table():
         PRIMARY KEY (game_id),
         CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id)
         );""")
-    cur.execute(query)
-    print("table requirements created")
-    cur.close()
+	cur.execute(query)
+	print("table requirements created")
+	conn.commit()
+	cur.close()
 
 def add_game(game_id,title,year,developer,publisher,rating,genre,price,description):
     cur = conn.cursor()
@@ -217,26 +238,28 @@ def add_player_number(game_id, single, online, local_co_op, online_co_op):
     cur.close()
 
 def fill_games():
-    cur = conn.cursor()
-    with open('game_data.csv', 'r') as games:
-        reader = csv.reader(games)
-        next(games)
-        for row in reader:
-            cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+	cur = conn.cursor()
+	with open('game_data.csv', 'r') as games:
+		reader = csv.reader(games)
+		next(games)
+		for row in reader:
+			cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     row
                     )
-    cur.close()
+	conn.commit()
+	cur.close()
 
 def fill_members():
-    cur = conn.cursor()
-    with open('member_data.csv', 'r') as members:
-        reader = csv.reader(members)
-        next(members)
-        for row in reader:
-            cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
-            row
-            )
-    cur.close()
+	cur = conn.cursor()
+	with open('member_data.csv', 'r') as members:
+		reader = csv.reader(members)
+		next(members)
+		for row in reader:
+			cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
+			row
+			)
+	conn.commit()
+	cur.close()
 
 #functions to retrive values from the database
 def select_all_from_table(table):
@@ -244,8 +267,6 @@ def select_all_from_table(table):
     query = ("""Select title,year,developer,publisher from %s""" %(table))
     cur.execute(query)
     conn.commit()
-    #for tuple in cursor:
-    #    print(f"{tuple}")
     return cur
 
 def select_from_table(table, attribute, value):
@@ -253,14 +274,4 @@ def select_from_table(table, attribute, value):
     query = ("Select * from %s where %s='%s'" %(table, attribute, value))
     cur.execute(query)
     conn.commit()
-    #for tuple in cur:
-    #    print("{tuple}")
     return cur
-
-#create_game_table();
-#fill_games();
-#select_from_table('game', 'title', 'FIFA');
-
-#create_member_table();
-#fill_members();
-conn.commit()
