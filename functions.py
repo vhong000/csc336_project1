@@ -1,12 +1,6 @@
 import csv
 import psycopg2
-
-#config for login to psql
-config = {
-    "user": 'pipesoft',
-    "host": '127.0.0.1',
-    "database": 'pipesoftdb'
-}
+from config import * 
 
 #connect and get cursor
 #try:
@@ -248,6 +242,7 @@ def fill_games():
     conn.commit()
     cur.close()
 
+
 def fill_members():
     cur = conn.cursor()
     with open('member_data.csv', 'r') as members:
@@ -255,6 +250,18 @@ def fill_members():
         next(members)
         for row in reader:
             cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
+            row
+            )
+    conn.commit()
+    cur.close()
+
+def fill_requirements():
+    cur = conn.cursor()
+    with open('req_data.csv', 'r') as reqs:
+        reader = csv.reader(reqs)
+        next(reqs)
+        for row in reader:
+            cur.execute("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES (%s, %s, %s, %s)",
             row
             )
     conn.commit()
@@ -274,3 +281,6 @@ def select_from_table(table, attribute, value):
     cur.execute(query)
     conn.commit()
     return cur
+
+create_requirements_table();
+fill_requirements();

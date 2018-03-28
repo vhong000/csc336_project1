@@ -4,7 +4,6 @@ from generate_game_data import *
 from generate_member_data import *
 import psycopg2
 
-
 def delete_all_tables():
     table_deleted = False
     text_select.delete('1.0', END)
@@ -98,8 +97,6 @@ def fill_tables():
         text_select.insert(INSERT, "Table members no filled\n")
         text_select.insert(INSERT, "Tables filled with data\n")
 
-
-
 frame = Tk()
 width = frame.winfo_screenwidth()/2
 height = frame.winfo_screenheight()/2
@@ -120,7 +117,6 @@ button_generate_data.grid(row=0,column=3)
 
 text_select = Text(frame, width=80, height=10)
 text_select.grid(pady=(10,100))
-
 
 
 frame.mainloop()
