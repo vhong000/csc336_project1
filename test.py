@@ -1,4 +1,4 @@
-from Tkinter import *
+from tkinter import *
 from functions import *
 import psycopg2
 
@@ -6,26 +6,26 @@ import psycopg2
 
 #function to search all the game with a title
 def search_games():
-        text_select.config(state='normal')
-	name = entry_name.get()
-	year = entry_year.get()
-	tempcur = select_from_table("game", "title", name)
-	
-	text_select.delete('1.0', END)
-	for tuple in tempcur:
-		text_select.insert(INSERT, tuple)
-		text_select.insert(INSERT, "\n")
+    text_select.config(state='normal')
+    name = entry_name.get()
+    year = entry_year.get()
+    tempcur = select_from_table("game", "title", name)
+
+    text_select.delete('1.0', END)
+    for tuple in tempcur:
+        text_select.insert(INSERT, tuple)
+        text_select.insert(INSERT, "\n")
 
 #function to show all games in the database
 def show_games():
-        text_select.config(state='normal')
-	tempcur = select_all_from_table("game")
-	
-	text_select.delete('1.0', END)
-	for tuple in tempcur:
-		text_select.insert(INSERT, tuple)
-		text_select.insert(INSERT, "\n")
-        text_select.config(state=DISABLED)
+    text_select.config(state='normal')
+    tempcur = select_all_from_table("game")
+
+    text_select.delete('1.0', END)
+    for tuple in tempcur:
+        text_select.insert(INSERT, tuple)
+        text_select.insert(INSERT, "\n")
+    text_select.config(state=DISABLED)
 
 #GUI functions
 frame = Tk()

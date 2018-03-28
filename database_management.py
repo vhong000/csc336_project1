@@ -4,112 +4,98 @@ from generate_game_data import *
 from generate_member_data import *
 import psycopg2
 
-
-def check_table_exists(tablename):
-		dbcur = conn.cursor()
-		dbcur.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '%s'" %(tablename))
-		if dbcur.fetchone()[0] == 1:
-			dbcur.close()
-			return True
-
-		dbcur.close()
-		return False
-		
-
 def delete_all_tables():
-	table_deleted = False
-	text_select.delete('1.0', END)
-	if (check_table_exists('requirements') == True):
-		drop_table('requirements')
-		text_select.insert(INSERT, "Table requirements dropped\n")
-		table_deleted = True
-	if (check_table_exists('reviews') == True):
-		drop_table('reviews')
-		text_select.insert(INSERT, "Table reviews dropped\n")
-		table_deleted = True
-	if (check_table_exists('friends') == True):
-		drop_table('friends')
-		text_select.insert(INSERT, "Table friends dropped\n")
-		table_deleted = True		
-	if (check_table_exists('poster') == True):
-		drop_table('poster')
-		text_select.insert(INSERT, "Table poster dropped\n")
-		table_deleted = True
-	if (check_table_exists('admin') == True):
-		drop_table('admin')
-		text_select.insert(INSERT, "Table admin dropped\n")
-		table_deleted = True
-	if (check_table_exists('shopping_cart') == True):
-		drop_table('shopping_cart')
-		text_select.insert(INSERT, "Table shopping_cart dropped\n")
-		table_deleted = True
-	if (check_table_exists('member') == True):
-		drop_table('member')
-		text_select.insert(INSERT, "Table member dropped\n")
-		table_deleted = True
-	if (check_table_exists('game') == True):
-		drop_table('game')
-		text_select.insert(INSERT, "Table game dropped\n")
-		table_deleted = True
-	if (table_deleted == False):
-		text_select.insert(INSERT, "No Tables dropped\n")
+    table_deleted = False
+    text_select.delete('1.0', END)
+    if (check_table_exists('requirements') == True):
+        drop_table('requirements')
+        text_select.insert(INSERT, "Table requirements dropped\n")
+        table_deleted = True
+    if (check_table_exists('reviews') == True):
+        drop_table('reviews')
+        text_select.insert(INSERT, "Table reviews dropped\n")
+        table_deleted = True
+    if (check_table_exists('friends') == True):
+        drop_table('friends')
+        text_select.insert(INSERT, "Table friends dropped\n")
+        table_deleted = True
+    if (check_table_exists('poster') == True):
+        drop_table('poster')
+        text_select.insert(INSERT, "Table poster dropped\n")
+        table_deleted = True
+    if (check_table_exists('admin') == True):
+        drop_table('admin')
+        text_select.insert(INSERT, "Table admin dropped\n")
+        table_deleted = True
+    if (check_table_exists('shopping_cart') == True):
+        drop_table('shopping_cart')
+        text_select.insert(INSERT, "Table shopping_cart dropped\n")
+        table_deleted = True
+    if (check_table_exists('member') == True):
+        drop_table('member')
+        text_select.insert(INSERT, "Table member dropped\n")
+        table_deleted = True
+    if (check_table_exists('game') == True):
+        drop_table('game')
+        text_select.insert(INSERT, "Table game dropped\n")
+        table_deleted = True
+    if (table_deleted == False):
+        text_select.insert(INSERT, "No Tables dropped\n")
 
 def generate_all_data():
-	generate_game_data()
-	generate_member_data()
-	text_select.insert(INSERT, "Data files generated\n")
-	
+    generate_game_data()
+    generate_member_data()
+    text_select.insert(INSERT, "Data files generated\n")
+    
 def create_all_teble():
-	table_created = False
-	text_select.delete('1.0', END)
-	if (check_table_exists('game') == False):
-		create_game_table()
-		text_select.insert(INSERT, "Table game created\n")
-		table_created = True
-	if (check_table_exists('member') == False):
-		create_member_table()
-		text_select.insert(INSERT, "Table member created\n")
-		table_created = True
-	if (check_table_exists('shopping_cart') == False):
-		create_shopping_cart_table()
-		text_select.insert(INSERT, "Table shopping_cart created\n")
-		table_created = True
-	if (check_table_exists('admin') == False):
-		create_admin_table()
-		text_select.insert(INSERT, "Table admin created\n")
-		table_created = True
-	if (check_table_exists('poster') == False):
-		create_poster_table()
-		text_select.insert(INSERT, "Table poster created\n")
-		table_created = True
-	if (check_table_exists('friends') == False):
-		create_friends_table()
-		text_select.insert(INSERT, "Table friends created\n")
-		table_created = True
-	if (check_table_exists('reviews') == False):
-		create_reviews_table()
-		text_select.insert(INSERT, "Table reviews created\n")
-		table_created = True
-	if (check_table_exists('requirements') == False):
-		create_requirements_table()
-		text_select.insert(INSERT, "Table requirements created\n")
-		table_created = True
-	if (table_created == False):
-		text_select.insert(INSERT, "No Tables created\n")
-	
+    table_created = False
+    text_select.delete('1.0', END)
+    if (check_table_exists('game') == False):
+        create_game_table()
+        text_select.insert(INSERT, "Table game created\n")
+        table_created = True
+    if (check_table_exists('member') == False):
+        create_member_table()
+        text_select.insert(INSERT, "Table member created\n")
+        table_created = True
+    if (check_table_exists('shopping_cart') == False):
+        create_shopping_cart_table()
+        text_select.insert(INSERT, "Table shopping_cart created\n")
+        table_created = True
+    if (check_table_exists('admin') == False):
+        create_admin_table()
+        text_select.insert(INSERT, "Table admin created\n")
+        table_created = True
+    if (check_table_exists('poster') == False):
+        create_poster_table()
+        text_select.insert(INSERT, "Table poster created\n")
+        table_created = True
+    if (check_table_exists('friends') == False):
+        create_friends_table()
+        text_select.insert(INSERT, "Table friends created\n")
+        table_created = True
+    if (check_table_exists('reviews') == False):
+        create_reviews_table()
+        text_select.insert(INSERT, "Table reviews created\n")
+        table_created = True
+    if (check_table_exists('requirements') == False):
+        create_requirements_table()
+        text_select.insert(INSERT, "Table requirements created\n")
+        table_created = True
+    if (table_created == False):
+        text_select.insert(INSERT, "No Tables created\n")
+
 def fill_tables():
-	text_select.delete('1.0', END)
-	if (check_table_exists('game') == True):
-		fill_games()
-	else:
-		text_select.insert(INSERT, "Table game no filled\n")
-	if (check_table_exists('member') == True):
-		fill_members()
-	else:
-		text_select.insert(INSERT, "Table members no filled\n")
-	text_select.insert(INSERT, "Tables filled with data\n")
-	
-		
+    text_select.delete('1.0', END)
+    if (check_table_exists('game') == True):
+        fill_games()
+    else:
+        text_select.insert(INSERT, "Table game no filled\n")
+    if (check_table_exists('member') == True):
+        fill_members()
+    else:
+        text_select.insert(INSERT, "Table members no filled\n")
+        text_select.insert(INSERT, "Tables filled with data\n")
 
 frame = Tk()
 width = frame.winfo_screenwidth()/2
@@ -131,7 +117,6 @@ button_generate_data.grid(row=0,column=3)
 
 text_select = Text(frame, width=80, height=10)
 text_select.grid(pady=(10,100))
-
 
 
 frame.mainloop()
