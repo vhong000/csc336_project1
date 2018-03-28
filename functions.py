@@ -241,7 +241,7 @@ def fill_members():
 #functions to retrive values from the database
 def select_all_from_table(table):
     cur = conn.cursor()
-    query = ("""Select * from %s""" %(table))
+    query = ("""Select title,year,developer,publisher from %s""" %(table))
     cur.execute(query)
     conn.commit()
     #for tuple in cursor:
