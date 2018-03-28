@@ -44,7 +44,7 @@ def create_game_table():
     try:
         cur.execute(query)
     except: 
-        print "didn't execute"
+        print("didn't execute")
     print("table game created")
     cur.close()
 
