@@ -14,7 +14,7 @@ def search_games():
 	for tuple in tempcur:
 		text_select.insert(INSERT, tuple)
 		text_select.insert(INSERT, "\n")
-        tempcur.close
+	tempcur.close
 	
 #function to show all games in the database
 def show_games():
