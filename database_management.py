@@ -1,7 +1,6 @@
 from tkinter import *
 from functions import *
-from generate_game_data import *
-from generate_member_data import *
+from generate_data import *
 import psycopg2
 
 def delete_all_tables():
@@ -45,6 +44,8 @@ def delete_all_tables():
 def generate_all_data():
     generate_game_data()
     generate_member_data()
+    generate_req_data()
+    text_select.delete('1.0', END)
     text_select.insert(INSERT, "Data files generated\n")
     
 def create_all_teble():
@@ -88,14 +89,30 @@ def create_all_teble():
 def fill_tables():
     text_select.delete('1.0', END)
     if (check_table_exists('game') == True):
-        fill_games()
+        try:
+            fill_games()
+        except:
+            conn.rollback()
+            text_select.insert(INSERT, "Table game could not be filled (most likely duplicate key)\n")
     else:
-        text_select.insert(INSERT, "Table game no filled\n")
+        text_select.insert(INSERT, "Table game does not exist\n")
     if (check_table_exists('member') == True):
-        fill_members()
+        try:
+            fill_members()
+        except:
+            conn.rollback()
+            text_select.insert(INSERT, "Table member could not be filled (most likely duplicate key)\n")
     else:
-        text_select.insert(INSERT, "Table members no filled\n")
-        text_select.insert(INSERT, "Tables filled with data\n")
+        text_select.insert(INSERT, "Table member does not exist\n")
+    if (check_table_exists('requirements') == True):
+        try:
+            fill_requirements()
+        except:
+            conn.rollback()
+            text_select.insert(INSERT, "Table requirements could not be filled (most likely duplicate key)\n")
+    else:
+        text_select.insert(INSERT, "Table requirements does not exist\n")
+    text_select.insert(INSERT, "Tables filling ended\n")
 
 frame = Tk()
 width = frame.winfo_screenwidth()/2
