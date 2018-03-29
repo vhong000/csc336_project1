@@ -9,7 +9,10 @@ def search_games():
     text_select.config(state='normal')
     name = entry_name.get()
     year = entry_year.get()
-    tempcur = select_from_table("game", "title", name)
+    if (name == "" and year != ""):
+        tempcur = select_from_table("game", "year", year)
+    elif (name != "" and year == ""):
+        tempcur = select_from_table("game", "title", name)
 
     text_select.delete('1.0', END)
     for tuple in tempcur:

@@ -1,6 +1,6 @@
 import csv
 import psycopg2
-from config import * 
+from config import *
 
 #connect and get cursor
 #try:
@@ -270,17 +270,14 @@ def fill_requirements():
 #functions to retrive values from the database
 def select_all_from_table(table):
     cur = conn.cursor()
-    query = ("""Select title,year,developer,publisher from %s""" %(table))
+    query = ("Select title,year,developer,publisher from %s" %(table))
     cur.execute(query)
     conn.commit()
     return cur
 
 def select_from_table(table, attribute, value):
     cur = conn.cursor()
-    query = ("Select * from %s where %s='%s'" %(table, attribute, value))
+    query = ("Select * from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
     cur.execute(query)
     conn.commit()
     return cur
-
-create_requirements_table();
-fill_requirements();
