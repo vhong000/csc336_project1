@@ -93,7 +93,7 @@ def fill_tables():
             fill_games()
         except:
             conn.rollback()
-            text_select.insert(INSERT, "Table game could not be filled (most likely duplicate key)\n")
+            text_select.insert(INSERT, "Table game could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table game does not exist\n")
     if (check_table_exists('member') == True):
@@ -101,7 +101,7 @@ def fill_tables():
             fill_members()
         except:
             conn.rollback()
-            text_select.insert(INSERT, "Table member could not be filled (most likely duplicate key)\n")
+            text_select.insert(INSERT, "Table member could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table member does not exist\n")
     if (check_table_exists('requirements') == True):
@@ -109,7 +109,7 @@ def fill_tables():
             fill_requirements()
         except:
             conn.rollback()
-            text_select.insert(INSERT, "Table requirements could not be filled (most likely duplicate key)\n")
+            text_select.insert(INSERT, "Table requirements could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table requirements does not exist\n")
     text_select.insert(INSERT, "Tables filling ended\n")
