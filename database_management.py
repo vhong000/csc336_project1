@@ -88,7 +88,6 @@ def create_all_teble():
 
 def fill_tables():
     text_select.delete('1.0', END)
-
     if (check_table_exists('game') == True):
         try:
             fill_games()
@@ -97,7 +96,6 @@ def fill_tables():
             text_select.insert(INSERT, "Table game could not be filled (most likely duplicate key)\n")
     else:
         text_select.insert(INSERT, "Table game does not exist\n")
-
     if (check_table_exists('member') == True):
         try:
             fill_members()
@@ -106,7 +104,6 @@ def fill_tables():
             text_select.insert(INSERT, "Table member could not be filled (most likely duplicate key)\n")
     else:
         text_select.insert(INSERT, "Table member does not exist\n")
- 
     if (check_table_exists('requirements') == True):
         try:
             fill_requirements()
@@ -115,7 +112,6 @@ def fill_tables():
             text_select.insert(INSERT, "Table requirements could not be filled (most likely duplicate key)\n")
     else:
         text_select.insert(INSERT, "Table requirements does not exist\n")
-
     text_select.insert(INSERT, "Tables filling ended\n")
 
 frame = Tk()
