@@ -1,4 +1,5 @@
 import csv
+import time
 import psycopg2
 from config import *
 
@@ -139,7 +140,7 @@ def create_reviews_table():
     game_id VARCHAR(8) NOT NULL,
     member_id VARCHAR(8) NOT NULL,
     score FLOAT,
-    feedbck VARCHAR(200) NOT NULL,
+    feedback VARCHAR(200) NOT NULL,
     time TIMESTAMP NOT NULL,
     
     PRIMARY KEY (member_id, time),
@@ -211,21 +212,21 @@ def add_friend(id, friend_id):
 
 def add_review(game_id, id, score, feedback, datetime):
     cur = conn.cursor()
-    query = ("INSERT INTO reviews (game_id, id, score, feedback, date/time)" %(game_id, id, score, feedback, data/time))
+    query = ("INSERT INTO reviews (game_id, member_id, score, feedback, time) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, id, score, feedback, datetime))
     cur.execute(query)
     conn.commit()
     cur.close()
 
 def add_requirements(game_id, min_cpu, min_storage, min_ram):
     cur = conn.cursor()
-    query = ("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram)" %(game_id, min_cpu, min_storage, min_ram))
+    query = ("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, min_cpu, min_storage, min_ram))
     cur.execute(query)
     conn.commit()
     cur.close()
 
 def add_player_number(game_id, single, online, local_co_op, online_co_op):
     cur = conn.cursor()
-    query = ("INSERT INTO player_number (game_id, single, online, local_co_op, online_co_op)" %(game_id, single, online, local_co_op, online_co_op))
+    query = ("INSERT INTO player_number (game_id, single, online, local_co_op, online_co_op) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, single, online, local_co_op, online_co_op))
     cur.execute(query)
     conn.commit()
     cur.close()
@@ -277,7 +278,26 @@ def select_all_from_table(table):
 
 def select_from_table(table, attribute, value):
     cur = conn.cursor()
-    query = ("Select * from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+    query = ("Select title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
     cur.execute(query)
     conn.commit()
     return cur
+
+def select_requirements(name):
+    cur = conn.cursor()
+    query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE UPPER(title) ~ UPPER('%s')" %(name))
+    cur.execute(query)
+    conn.commit()
+    return cur
+
+# temporary review function
+def insert_review(game_id, feedback, time):
+    cur = conn.cursor()
+    query = add_review(game_id, '0', 3.5, feedback, time);
+    cur.execute(query) 
+    conn.commit()
+    return cur
+
+#create_reviews_table();
+#rev_time = time.ctime()
+#add_review('5', '0', float(3.5), 'it was ok', rev_time)
