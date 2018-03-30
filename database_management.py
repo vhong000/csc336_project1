@@ -3,6 +3,45 @@ from functions import *
 from generate_data import *
 import psycopg2
 
+class MyDialog:
+    def __init__(self, parent):
+        top = self.top = Toplevel(parent)
+        Label(top, text="Database config").grid(row=0, columnspan=2)
+
+        self.label_user = Label(top, text="user:")
+        self.user = Entry(top)
+        self.label_user.grid(row=1, column=0)
+        self.user.grid(row=1, column=1)
+        
+        self.label_password = Label(top, text="password:")
+        self.password = Entry(top)
+        self.label_password.grid(row=2, column=0)
+        self.password.grid(row=2, column=1)
+        
+        self.label_host = Label(top, text="host:")
+        self.host = Entry(top)
+        self.host.insert(0, "127.0.0.1")
+        self.label_host.grid(row=3, column=0)
+        self.host.grid(row=3, column=1)
+        
+        self.label_database = Label(top, text="database:")
+        self.database = Entry(top)
+        self.label_database.grid(row=4, column=0)
+        self.database.grid(row=4, column=1)
+     
+        b = Button(top, text="OK", command=self.ok)
+        b.grid(row=5, columnspan=2)
+        parent.lift()
+
+    def ok(self):
+        download_dir = "config.csv"
+        config_file = open(download_dir, "w")
+        columnTitleRow = "user, password, host, database\n"
+        config_file.write(columnTitleRow)
+        row = (self.user.get() + ',' + self.password.get() + ',' + self.host.get() + ',' + self.database.get())
+        config_file.write(row)
+        self.top.destroy()
+
 def delete_all_tables():
     table_deleted = False
     text_select.delete('1.0', END)
@@ -135,5 +174,7 @@ button_generate_data.grid(row=0,column=3)
 text_select = Text(frame, width=80, height=10)
 text_select.grid(pady=(10,100))
 
-
+d = MyDialog(frame)
+frame.wait_window(d.top)
+connect()
 frame.mainloop()
