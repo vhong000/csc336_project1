@@ -20,6 +20,10 @@ def search_games():
         text_select.insert(INSERT, "\n")
     text_select.config(state=DISABLED)
 
+#function to review game
+def review_game():
+    i=5;
+    
 #function to show all games in the database
 def show_games():
     text_select.config(state='normal')
@@ -49,9 +53,9 @@ height = frame.winfo_screenheight()/2
 frame.title("PIPE")
 frame.geometry("%dx%d"%(width,height))
 top_frame = Frame(frame)
-top_frame.grid()
+top_frame.grid(row=0,column=0)
 bottom_frame = Frame(frame)
-bottom_frame.grid()
+bottom_frame.grid(row=1,column=0)
 
 # for games
 button_search = Button(top_frame, text="search games", command=search_games)
@@ -68,19 +72,31 @@ label_req_name = Label(bottom_frame, text="name: ")
 entry_req_name = Entry(bottom_frame)
 #button_req_show = Button(bottom_frame, text="Show all members")
 
+# for reviews
+button_review = Button(bottom_frame, text="Review", command=review_game)
+label_gameid = Label(bottom_frame, text="Game_id:")
+entry_gameid = Entry(bottom_frame,width = 4)
+label_review = Label(bottom_frame, text="Review:")
+entry_review = Entry(bottom_frame, width = 70)
+
 button_search.grid(row=0,column=0)
 label_name.grid(row=0,column=1)
 entry_name.grid(row=0,column=2)
 #label_year.grid(row=0,column=3)
 #entry_year.grid(row=0,column=4)
-button_show.grid(row=0, column=5)
+button_show.grid(row=0, column=4)
 #label_results.grid(row=1, column=3)
-text_select = Text(frame, width=100, height=20)
-text_select.grid(pady=(10,100))
+text_select = Text(top_frame, width=100, height=20)
+text_select.grid(pady=(10,100),row=1,column=3)
+button_review.grid(row=0, column=0)
+label_gameid.grid(row=0, column=1)
+entry_gameid.grid(row=0, column=2)
+label_review.grid(row=0, column=3)
+entry_review.grid(row=0, column=4)
 
 req_search.grid(row=1,column=0)
-text_req_select = Text(frame, width=100, height=20)
-text_req_select.grid(pady=(10,100))
+text_req_select = Text(bottom_frame, width=100, height=20)
+text_req_select.grid(pady=(10,100),row=1,column=4)
 
 text_select.insert(INSERT, "/Search only works with title for now")
 frame.mainloop()
