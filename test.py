@@ -3,7 +3,6 @@ from functions import *
 import psycopg2
 
 
-
 #function to search all the game with a title
 def search_games():
     text_select.config(state='normal')
@@ -90,10 +89,6 @@ class MyDialog:
         self.top.destroy()
 
 
-    
-    
-    
-    
     
 #GUI functions
 frame = Tk()
