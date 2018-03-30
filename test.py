@@ -22,7 +22,10 @@ def search_games():
 
 #function to review game
 def review_game():
-    i=5;
+    gameid = entry_gameid.get()
+    gamereview = entry_review.get()
+    currtime = time.ctime()
+    insert_review(gameid, gamereview, currtime);
     
 #function to show all games in the database
 def show_games():
