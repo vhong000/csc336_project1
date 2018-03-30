@@ -1,11 +1,24 @@
 import csv
 import time
 import psycopg2
-from config import *
+#from config import *
 
 #connect and get cursor
 #try:
-conn = psycopg2.connect(**config)
+#conn = psycopg2.connect(**config)
+def connect():
+    with open('config.csv', 'r') as config_data:
+        reader = csv.reader(config_data)
+        next(config_data)
+        row = next(reader)
+        config = {
+                    "user": row[0],
+                    "password": row[1],
+                    "host": row[2],
+                    "database": row[3]
+                } 
+    global conn
+    conn = psycopg2.connect(**config)
 #except:
 #    print "I am unable to connect to the database"
 #try: 
