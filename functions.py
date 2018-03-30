@@ -277,7 +277,14 @@ def select_all_from_table(table):
 
 def select_from_table(table, attribute, value):
     cur = conn.cursor()
-    query = ("Select * from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+    query = ("Select title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+    cur.execute(query)
+    conn.commit()
+    return cur
+
+def select_requirements(name):
+    cur = conn.cursor()
+    query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE UPPER(title) ~ UPPER('%s')" %(name))
     cur.execute(query)
     conn.commit()
     return cur
