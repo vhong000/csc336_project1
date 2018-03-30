@@ -1,6 +1,6 @@
 import csv
 import psycopg2
-from config import *
+#from config import *
 
 #connect and get cursor
 #try:
