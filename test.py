@@ -54,8 +54,8 @@ def show_requirements():
     
 #GUI functions
 frame = Tk()
-width = frame.winfo_screenwidth()/2
-height = frame.winfo_screenheight()/2
+width = frame.winfo_screenwidth()
+height = frame.winfo_screenheight()
 frame.title("PIPE")
 frame.geometry("%dx%d"%(width,height))
 top_frame = Frame(frame)
