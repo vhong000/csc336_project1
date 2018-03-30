@@ -305,11 +305,8 @@ def select_requirements(name):
 
 # temporary review function
 def insert_review(game_id, feedback, time):
-    cur = conn.cursor()
-    query = add_review(game_id, '0', 3.5, feedback, time);
-    cur.execute(query) 
-    conn.commit()
-    return cur
+    add_review(game_id, '0', 3.5, feedback, time);
+
 
 #create_reviews_table();
 #rev_time = time.ctime()
