@@ -219,14 +219,14 @@ def add_review(game_id, id, score, feedback, datetime):
 
 def add_requirements(game_id, min_cpu, min_storage, min_ram):
     cur = conn.cursor()
-    query = ("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram)" %(game_id, min_cpu, min_storage, min_ram))
+    query = ("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, min_cpu, min_storage, min_ram))
     cur.execute(query)
     conn.commit()
     cur.close()
 
 def add_player_number(game_id, single, online, local_co_op, online_co_op):
     cur = conn.cursor()
-    query = ("INSERT INTO player_number (game_id, single, online, local_co_op, online_co_op)" %(game_id, single, online, local_co_op, online_co_op))
+    query = ("INSERT INTO player_number (game_id, single, online, local_co_op, online_co_op) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, single, online, local_co_op, online_co_op))
     cur.execute(query)
     conn.commit()
     cur.close()
