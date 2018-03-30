@@ -1,4 +1,5 @@
 import csv
+import time
 import psycopg2
 from config import *
 
@@ -139,7 +140,7 @@ def create_reviews_table():
     game_id VARCHAR(8) NOT NULL,
     member_id VARCHAR(8) NOT NULL,
     score FLOAT,
-    feedbck VARCHAR(200) NOT NULL,
+    feedback VARCHAR(200) NOT NULL,
     time TIMESTAMP NOT NULL,
     
     PRIMARY KEY (member_id, time),
@@ -211,7 +212,7 @@ def add_friend(id, friend_id):
 
 def add_review(game_id, id, score, feedback, datetime):
     cur = conn.cursor()
-    query = ("INSERT INTO reviews (game_id, id, score, feedback, date/time)" %(game_id, id, score, feedback, data/time))
+    query = ("INSERT INTO reviews (game_id, member_id, score, feedback, time) VALUES ('%s', '%s', '%s', '%s', '%s')" %(game_id, id, score, feedback, datetime))
     cur.execute(query)
     conn.commit()
     cur.close()
@@ -288,3 +289,15 @@ def select_requirements(name):
     cur.execute(query)
     conn.commit()
     return cur
+
+# temporary review function
+def insert_review(game_id, feedback, time):
+    cur = conn.cursor()
+    query = add_review(game_id, '0', 3.5, feedback, time);
+    cur.execute(query) 
+    conn.commit()
+    return cur
+
+#create_reviews_table();
+#rev_time = time.ctime()
+#add_review('5', '0', float(3.5), 'it was ok', rev_time)
