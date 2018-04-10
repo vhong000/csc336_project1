@@ -291,8 +291,18 @@ def select_all_from_table(table):
 
 def select_from_table(table, attribute, value):
     cur = conn.cursor()
-    query = ("Select title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
-    cur.execute(query)
+    if(value==""):
+        return list()
+    if (attribute == "year" or attribute == "price"):
+        if (not value.isnumeric()):
+            return list()
+        else :
+            query = ("Select title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
+            cur.execute(query)
+    else:
+        query = ("Select title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+        cur.execute(query)
+    
     conn.commit()
     return cur
 
