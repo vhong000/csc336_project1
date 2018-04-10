@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 from functions import *
 import psycopg2
 
@@ -7,14 +8,12 @@ import psycopg2
 #function to search all the game with a title
 def search_games():
     text_select.config(state='normal')
-    name = entry_name.get()
-    year = entry_year.get()
-    if (name == "" and year != ""):
-        tempcur = select_from_table("game", "year", year)
-    elif (name != "" and year == ""):
-        tempcur = select_from_table("game", "title", name)
-
     text_select.delete('1.0', END)
+    attribute = combobox_tag.get()
+    input = entry_input.get()
+    
+    tempcur = select_from_table("game", attribute, input)
+
     for tuple in tempcur:
         text_select.insert(INSERT, tuple)
         text_select.insert(INSERT, "\n")
@@ -40,7 +39,7 @@ def show_games():
 
 def show_requirements():
     text_req_select.config(state='normal')
-    name = entry_name.get()
+    name = entry_input.get()
     tempcur = select_requirements(name)
 
     text_req_select.delete('1.0', END)
@@ -54,10 +53,11 @@ def show_requirements():
     
 #GUI functions
 frame = Tk()
-width = frame.winfo_screenwidth()
-height = frame.winfo_screenheight()
-frame.title("PIPE")
+width = frame.winfo_screenwidth()/2
+height = frame.winfo_screenheight()/2
 frame.geometry("%dx%d"%(width,height))
+frame.state('zoomed')
+frame.title("PIPE")
 top_frame = Frame(frame)
 top_frame.grid(row=0,column=0)
 bottom_frame = Frame(frame)
@@ -65,10 +65,14 @@ bottom_frame.grid(row=1,column=0)
 
 # for games
 button_search = Button(top_frame, text="search games", command=search_games)
-label_name = Label(top_frame, text="name:")
-label_year = Label(top_frame, text="year:")
-entry_name = Entry(top_frame)
-entry_year = Entry(top_frame)
+#label_name = Label(top_frame, text="name:")
+combobox_tag = ttk.Combobox(top_frame, state="readonly", values=("title", "year", "developer", "publisher", "rating", "genre", "price")) 
+combobox_tag.set("title")
+
+
+#label_year = Label(top_frame, text="year:")
+entry_input = Entry(top_frame)
+#entry_year = Entry(top_frame)
 button_show = Button(top_frame, text="Show all games", command=show_games)
 #label_results = Label(top_frame, text="results")
 
@@ -85,9 +89,12 @@ entry_gameid = Entry(bottom_frame,width = 4)
 label_review = Label(bottom_frame, text="Review:")
 entry_review = Entry(bottom_frame, width = 70)
 
+
+
 button_search.grid(row=0,column=0)
-label_name.grid(row=0,column=1)
-entry_name.grid(row=0,column=2)
+combobox_tag.grid(row=0,column=1)
+#label_name.grid(row=0,column=2)
+entry_input.grid(row=0,column=3)
 #label_year.grid(row=0,column=3)
 #entry_year.grid(row=0,column=4)
 button_show.grid(row=0, column=4)
@@ -100,9 +107,12 @@ entry_gameid.grid(row=0, column=2)
 label_review.grid(row=0, column=3)
 entry_review.grid(row=0, column=4)
 
+
 req_search.grid(row=1,column=0)
 text_req_select = Text(bottom_frame, width=100, height=20)
 text_req_select.grid(pady=(10,100),row=1,column=4)
+
+
 
 text_select.insert(INSERT, "/Search only works with title for now")
 connect()
