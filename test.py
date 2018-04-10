@@ -4,7 +4,6 @@ from functions import *
 import psycopg2
 
 
-
 #function to search all the game with a title
 def search_games():
     text_select.config(state='normal')
@@ -18,6 +17,7 @@ def search_games():
         text_select.insert(INSERT, tuple)
         text_select.insert(INSERT, "\n")
     text_select.config(state=DISABLED)
+   
 
 #function to review game
 def review_game():
@@ -47,8 +47,13 @@ def show_requirements():
         text_req_select.insert(INSERT, tuple)
         text_req_select.insert(INSERT, "\n")
     text_req_select.config(state=DISABLED)
-
-
+    
+def callback(event):
+    line_start = text_select.index("@%s,%s linestart" % (event.x, event.y))
+    line_end = text_select.index("%s lineend" % line_start)
+    text_select.tag_remove("highlight", 1.0, "end")
+    text_select.tag_add("highlight", line_start, line_end)
+    text_select.tag_configure("highlight", background="bisque")
     
     
 #GUI functions
@@ -68,8 +73,6 @@ button_search = Button(top_frame, text="search games", command=search_games)
 #label_name = Label(top_frame, text="name:")
 combobox_tag = ttk.Combobox(top_frame, state="readonly", values=("title", "year", "developer", "publisher", "rating", "genre", "price")) 
 combobox_tag.set("title")
-
-
 #label_year = Label(top_frame, text="year:")
 entry_input = Entry(top_frame)
 #entry_year = Entry(top_frame)
@@ -91,6 +94,7 @@ entry_review = Entry(bottom_frame, width = 70)
 
 
 
+
 button_search.grid(row=0,column=0)
 combobox_tag.grid(row=0,column=1)
 #label_name.grid(row=0,column=2)
@@ -101,6 +105,7 @@ button_show.grid(row=0, column=4)
 #label_results.grid(row=1, column=3)
 text_select = Text(top_frame, width=100, height=20)
 text_select.grid(pady=(10,100),row=1,column=3)
+text_select.bind("<Button-1>", callback)
 button_review.grid(row=0, column=0)
 label_gameid.grid(row=0, column=1)
 entry_gameid.grid(row=0, column=2)
@@ -114,7 +119,7 @@ text_req_select.grid(pady=(10,100),row=1,column=4)
 
 
 
-text_select.insert(INSERT, "/Search only works with title for now")
+text_select.insert(INSERT, "Welcome!")
 connect()
 frame.mainloop()
 
