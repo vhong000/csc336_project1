@@ -1,0 +1,10 @@
+
+
+# csv and pyc
+*.csv
+*.pyc
+*.swp
+*.zip
+config.py
+
+__pycache__/
