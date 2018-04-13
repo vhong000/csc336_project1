@@ -6,3 +6,5 @@
 *.swp
 *.zip
 config.py
+
+__pycache__/
