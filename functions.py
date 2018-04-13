@@ -297,7 +297,7 @@ def select_from_table(table, attribute, value):
         if (not value.isnumeric()):
             return list()
         else :
-            query = ("Select title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
+            query = ("Select game_id,title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
             cur.execute(query)
     else:
         query = ("Select game_id,title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
