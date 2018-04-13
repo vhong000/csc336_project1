@@ -284,7 +284,7 @@ def fill_requirements():
 #functions to retrive values from the database
 def select_all_from_table(table):
     cur = conn.cursor()
-    query = ("Select title,year,developer,publisher from %s" %(table))
+    query = ("Select game_id,title,year,developer,publisher from %s" %(table))
     cur.execute(query)
     conn.commit()
     return cur
@@ -300,15 +300,15 @@ def select_from_table(table, attribute, value):
             query = ("Select title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
             cur.execute(query)
     else:
-        query = ("Select title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+        query = ("Select game_id,title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
         cur.execute(query)
     
     conn.commit()
     return cur
 
-def select_requirements(name):
+def select_requirements(game_id):
     cur = conn.cursor()
-    query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE UPPER(title) ~ UPPER('%s')" %(name))
+    query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE game_id = '%s'" %(game_id))
     cur.execute(query)
     conn.commit()
     return cur
