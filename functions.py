@@ -314,8 +314,8 @@ def select_requirements(name):
     return cur
 
 # temporary review function
-def insert_review(game_id, feedback, time):
-    add_review(game_id, '0', 3.5, feedback, time);
+def insert_review(game_id, memid, score, feedback, time):
+    add_review(game_id, memid, score, feedback, time);
 
 
 #create_reviews_table();

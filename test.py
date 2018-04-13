@@ -22,9 +22,11 @@ def search_games():
 #function to review game
 def review_game():
     gameid = entry_gameid.get()
+    memid = entry_memid.get();
+    score = entry_score.get();
     gamereview = entry_review.get()
     currtime = time.ctime()
-    insert_review(gameid, gamereview, currtime);
+    insert_review(gameid, memid, score, gamereview, currtime);
     
 #function to show all games in the database
 def show_games():
@@ -61,8 +63,14 @@ frame = Tk()
 width = frame.winfo_screenwidth()/2
 height = frame.winfo_screenheight()/2
 frame.geometry("%dx%d"%(width,height))
-frame.state('zoomed')
+frame.state('iconic')
 frame.title("PIPE")
+
+#canvas = Canvas(frame, bg="Yellow")
+#canvas.grid(row=0, column=0)
+#vbar = Scrollbar(frame, orient=VERTICAL, command=canvas.yview)
+#canvas.configure(yscrollcommand=vbar.set)
+
 top_frame = Frame(frame)
 top_frame.grid(row=0,column=0)
 bottom_frame = Frame(frame)
@@ -87,8 +95,12 @@ entry_req_name = Entry(bottom_frame)
 
 # for reviews
 button_review = Button(bottom_frame, text="Review", command=review_game)
-label_gameid = Label(bottom_frame, text="Game_id:")
+label_gameid = Label(bottom_frame, text="Game Id:")
 entry_gameid = Entry(bottom_frame,width = 4)
+label_memid = Label(bottom_frame, text="Member Id:")
+entry_memid = Entry(bottom_frame, width = 4)
+label_score = Label(bottom_frame, text="Review Score:")
+entry_score = Entry(bottom_frame, width = 4)
 label_review = Label(bottom_frame, text="Review:")
 entry_review = Entry(bottom_frame, width = 70)
 
@@ -109,8 +121,12 @@ text_select.bind("<Button-1>", callback)
 button_review.grid(row=0, column=0)
 label_gameid.grid(row=0, column=1)
 entry_gameid.grid(row=0, column=2)
-label_review.grid(row=0, column=3)
-entry_review.grid(row=0, column=4)
+label_memid.grid(row=0, column=3)
+entry_memid.grid(row=0, column=4)
+label_score.grid(row=0, column=5)
+entry_score.grid(row=0, column=6)
+label_review.grid(row=0, column=7)
+entry_review.grid(row=0, column=8)
 
 
 req_search.grid(row=1,column=0)
