@@ -3,20 +3,27 @@ from tkinter import ttk
 from functions import *
 import psycopg2
 
+id_list = list()
 
 #function to search all the game with a title
 def search_games():
     text_select.config(state='normal')
     text_select.delete('1.0', END)
     attribute = combobox_tag.get()
-    input = entry_input.get()
-    
+    input = entry_input.get()    
     tempcur = select_from_table("game", attribute, input)
 
-    for tuple in tempcur:
-        text_select.insert(INSERT, tuple)
-        text_select.insert(INSERT, "\n")
+    del id_list[:]
+    new_line = False
+    for (game_id,title,year,developer,publisher) in tempcur:
+        id_list.append(game_id)
+        if (new_line == True) :
+            text_select.insert(INSERT, "\n")
+        text_select.insert(INSERT, (title,year,developer,publisher))
+        new_line = True
+        
     text_select.config(state=DISABLED)
+    
    
 
 #function to review game
@@ -32,14 +39,20 @@ def review_game():
 def show_games():
     text_select.config(state='normal')
     tempcur = select_all_from_table("game")
-
     text_select.delete('1.0', END)
-    for tuple in tempcur:
-        text_select.insert(INSERT, tuple)
-        text_select.insert(INSERT, "\n")
+    
+    del id_list[:]
+    new_line = False
+    for (game_id,title,year,developer,publisher) in tempcur:
+        id_list.append(game_id)
+        if (new_line == True) :
+            text_select.insert(INSERT, "\n")
+        text_select.insert(INSERT, (title,year,developer,publisher))
+        new_line = True
     text_select.config(state=DISABLED)
 
 def show_requirements():
+    '''
     text_req_select.config(state='normal')
     name = entry_input.get()
     tempcur = select_requirements(name)
@@ -49,6 +62,7 @@ def show_requirements():
         text_req_select.insert(INSERT, tuple)
         text_req_select.insert(INSERT, "\n")
     text_req_select.config(state=DISABLED)
+    '''
     
 def callback(event):
     line_start = text_select.index("@%s,%s linestart" % (event.x, event.y))
@@ -56,6 +70,17 @@ def callback(event):
     text_select.tag_remove("highlight", 1.0, "end")
     text_select.tag_add("highlight", line_start, line_end)
     text_select.tag_configure("highlight", background="bisque")
+    
+    
+    text_req_select.config(state='normal')
+    game_id = id_list[(int(float(line_start))-1)]
+    tempcur = select_requirements(game_id)
+    text_req_select.delete('1.0', END)
+    for tuple in tempcur:
+        text_req_select.insert(INSERT, tuple)
+        text_req_select.insert(INSERT, "\n")
+    text_req_select.config(state=DISABLED)
+    
     
     
 #GUI functions
