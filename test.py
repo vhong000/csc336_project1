@@ -35,7 +35,7 @@ def search_games():
 
 #function to review game
 def review_game():
-    gameid = entry_gameid.get()
+    gameid = int(entry_gameid.get("1.0", END))
     memid = entry_memid.get();
     score = entry_score.get();
     gamereview = entry_review.get()
@@ -77,6 +77,12 @@ def callback(event):
         text_req_select.insert(INSERT, tuple)
         text_req_select.insert(INSERT, "\n")
     text_req_select.config(state=DISABLED)
+    
+    #part for game_id in reviews
+    entry_gameid.config(state='normal')
+    entry_gameid.delete('1.0', END)
+    entry_gameid.insert(INSERT, game_id)
+    entry_gameid.config(state=DISABLED)
     
     #part that changes the poster
     tempcur = select_posters(game_id)
@@ -124,7 +130,7 @@ text_req_select = Text(center_frame, width=60, height=5)
 # for reviews
 button_review = Button(bottom_frame, text="Review", command=review_game)
 label_gameid = Label(bottom_frame, text="Game Id:")
-entry_gameid = Entry(bottom_frame,width = 4)
+entry_gameid = Text(bottom_frame,width = 4, height=1, state='disabled')
 label_memid = Label(bottom_frame, text="Member Id:")
 entry_memid = Entry(bottom_frame, width = 4)
 label_score = Label(bottom_frame, text="Review Score:")
