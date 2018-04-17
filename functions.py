@@ -211,7 +211,7 @@ def add_admin(admin_id, name, email, password, rank):
 
 def add_poster(game_id, link):
     cur = conn.cursor()
-    query = ("INSER INTO posters (game_id, link) VALUES ('%s', '%s')" %(game_id, link))
+    query = ("INSERT INTO poster (game_id, link) VALUES ('%s', '%s')" %(game_id, link))
     cur.execute(query)
     conn.commit()
     cur.close()
@@ -280,6 +280,14 @@ def fill_requirements():
             )
     conn.commit()
     cur.close()
+    
+def fill_posters():
+    cur = conn.cursor()
+    query = ("Select game_id,title from game")
+    cur.execute(query)
+    for (game_id, title) in cur:
+        add_poster(game_id, title)    
+    
 
 #functions to retrive values from the database
 def select_all_from_table(table):
@@ -292,10 +300,10 @@ def select_all_from_table(table):
 def select_from_table(table, attribute, value):
     cur = conn.cursor()
     if(value==""):
-        return list()
+        return None
     if (attribute == "year" or attribute == "price"):
         if (not value.isnumeric()):
-            return list()
+            return None
         else :
             query = ("Select game_id,title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
             cur.execute(query)
@@ -313,6 +321,14 @@ def select_requirements(game_id):
     conn.commit()
     return cur
 
+def select_posters(game_id):
+    cur = conn.cursor()
+    query = ("Select link FROM poster WHERE game_id = '%s'" %(game_id))
+    cur.execute(query)
+    conn.commit()
+    return cur
+    
+    
 # temporary review function
 def insert_review(game_id, memid, score, feedback, time):
     add_review(game_id, memid, score, feedback, time);
