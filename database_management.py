@@ -1,5 +1,6 @@
 from tkinter import *
 from functions import *
+import functions
 from generate_data import *
 import psycopg2
 
@@ -131,7 +132,7 @@ def fill_tables():
         try:
             fill_games()
         except:
-            conn.rollback()
+            functions.conn.rollback()
             text_select.insert(INSERT, "Table game could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table game does not exist\n")
@@ -139,7 +140,7 @@ def fill_tables():
         try:
             fill_members()
         except:
-            conn.rollback()
+            functions.conn.rollback()
             text_select.insert(INSERT, "Table member could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table member does not exist\n")
@@ -147,10 +148,19 @@ def fill_tables():
         try:
             fill_requirements()
         except:
-            conn.rollback()
+            functions.conn.rollback()
             text_select.insert(INSERT, "Table requirements could not be filled (duplicate key or no data file)\n")
     else:
         text_select.insert(INSERT, "Table requirements does not exist\n")
+    if (check_table_exists('poster') == True):
+        try:
+            fill_posters()
+        except:
+            functions.conn.rollback()
+            text_select.insert(INSERT, "Table poster could not be filled (duplicate key or no data file)\n")
+    else:
+        text_select.insert(INSERT, "Table poster does not exist\n")
+    
     text_select.insert(INSERT, "Tables filling ended\n")
 
 frame = Tk()
