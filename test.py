@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from functions import *
+from PIL import ImageTk, Image
 import psycopg2
 
 id_list = list()
@@ -51,26 +52,13 @@ def show_games():
         new_line = True
     text_select.config(state=DISABLED)
 
-def show_requirements():
-    '''
-    text_req_select.config(state='normal')
-    name = entry_input.get()
-    tempcur = select_requirements(name)
-
-    text_req_select.delete('1.0', END)
-    for tuple in tempcur:
-        text_req_select.insert(INSERT, tuple)
-        text_req_select.insert(INSERT, "\n")
-    text_req_select.config(state=DISABLED)
-    '''
-    
+#function to show game requirements at click
 def callback(event):
     line_start = text_select.index("@%s,%s linestart" % (event.x, event.y))
     line_end = text_select.index("%s lineend" % line_start)
     text_select.tag_remove("highlight", 1.0, "end")
     text_select.tag_add("highlight", line_start, line_end)
     text_select.tag_configure("highlight", background="bisque")
-    
     
     text_req_select.config(state='normal')
     game_id = id_list[(int(float(line_start))-1)]
@@ -83,40 +71,37 @@ def callback(event):
     
     
     
-#GUI functions
+#GUI functions 
+#main window
 frame = Tk()
-width = frame.winfo_screenwidth()/2
-height = frame.winfo_screenheight()/2
-frame.geometry("%dx%d"%(width,height))
-frame.state('iconic')
+#width = frame.winfo_screenwidth()-100
+#height = frame.winfo_screenheight()-100
+#frame.geometry("%dx%d"%(width,height))
 frame.title("PIPE")
 
-#canvas = Canvas(frame, bg="Yellow")
-#canvas.grid(row=0, column=0)
-#vbar = Scrollbar(frame, orient=VERTICAL, command=canvas.yview)
-#canvas.configure(yscrollcommand=vbar.set)
-
+#three frames for the GUI
 top_frame = Frame(frame)
-top_frame.grid(row=0,column=0)
+top_frame.grid(row=0)
+center_frame = Frame(frame)
+center_frame.grid(row=1)
 bottom_frame = Frame(frame)
-bottom_frame.grid(row=1,column=0)
+bottom_frame.grid(row=2)
 
-# for games
+
+
+# for game search
 button_search = Button(top_frame, text="search games", command=search_games)
-#label_name = Label(top_frame, text="name:")
 combobox_tag = ttk.Combobox(top_frame, state="readonly", values=("title", "year", "developer", "publisher", "rating", "genre", "price")) 
 combobox_tag.set("title")
-#label_year = Label(top_frame, text="year:")
-entry_input = Entry(top_frame)
-#entry_year = Entry(top_frame)
+entry_input = Entry(top_frame, width=50)
 button_show = Button(top_frame, text="Show all games", command=show_games)
-#label_results = Label(top_frame, text="results")
+text_select = Text(center_frame, width=80, height=20)
+
 
 # for requirements
-req_search = Button(bottom_frame, text="search requirements", command=show_requirements)
-label_req_name = Label(bottom_frame, text="name: ")
-entry_req_name = Entry(bottom_frame)
-#button_req_show = Button(bottom_frame, text="Show all members")
+text_select.bind("<Button-1>", callback)
+text_req_select = Text(center_frame, width=60, height=5)
+
 
 # for reviews
 button_review = Button(bottom_frame, text="Review", command=review_game)
@@ -131,37 +116,45 @@ entry_review = Entry(bottom_frame, width = 70)
 
 
 
-
-button_search.grid(row=0,column=0)
-combobox_tag.grid(row=0,column=1)
-#label_name.grid(row=0,column=2)
-entry_input.grid(row=0,column=3)
-#label_year.grid(row=0,column=3)
-#entry_year.grid(row=0,column=4)
-button_show.grid(row=0, column=4)
-#label_results.grid(row=1, column=3)
-text_select = Text(top_frame, width=100, height=20)
-text_select.grid(pady=(10,100),row=1,column=3)
-text_select.bind("<Button-1>", callback)
-button_review.grid(row=0, column=0)
-label_gameid.grid(row=0, column=1)
-entry_gameid.grid(row=0, column=2)
-label_memid.grid(row=0, column=3)
-entry_memid.grid(row=0, column=4)
-label_score.grid(row=0, column=5)
-entry_score.grid(row=0, column=6)
-label_review.grid(row=0, column=7)
-entry_review.grid(row=0, column=8)
+#grid positioning
+#top frame
+button_search.grid(padx=(5), pady=(5), row=0,column=0)
+combobox_tag.grid(padx=(5), pady=(5), row=0,column=1)
+entry_input.grid(padx=(5), pady=(5), row=0,column=3)
+button_show.grid(padx=(5), pady=(5), row=0, column=4)
+#center frame 
+text_select.grid(padx=(10,0), pady=(10,0),row=0,column=0, rowspan=2)
+text_req_select.grid(padx=(10), pady=(10),row=1,column=2)
+#bottom frame
+button_review.grid(padx=(5), pady=(5), row=0, column=0)
+label_gameid.grid(padx=(5,0), pady=(5), row=0, column=1)
+entry_gameid.grid(padx=(0,5), pady=(5), row=0, column=2)
+label_memid.grid(padx=(5,0), pady=(5), row=0, column=3)
+entry_memid.grid(padx=(0,5), pady=(5), row=0, column=4)
+label_score.grid(padx=(5,0), pady=(5), row=0, column=5)
+entry_score.grid(padx=(0,5), pady=(5), row=0, column=6)
+label_review.grid(padx=(5,0), pady=(5), row=0, column=7)
+entry_review.grid(padx=(0,5), pady=(5), row=0, column=8)
 
 
-req_search.grid(row=1,column=0)
-text_req_select = Text(bottom_frame, width=100, height=20)
-text_req_select.grid(pady=(10,100),row=1,column=4)
 
+#for image
+text_req_select.update()
+img_width = int(text_req_select.winfo_width()/2)
+img_height = int(7*text_select.winfo_height()/8)
+
+canvas = Canvas(center_frame, width = img_width , height = img_height)      
+canvas.grid(pady=(10,0),row=0, column=2)   
+img = Image.open("posters/argo.jpg") 
+img = img.resize((img_width, img_height), Image.ANTIALIAS)  
+image = ImageTk.PhotoImage(img)
+canvas.create_image(0,0, anchor=NW, image=image)
 
 
 text_select.insert(INSERT, "Welcome!")
 connect()
 frame.mainloop()
+
+
 
 
