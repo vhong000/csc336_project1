@@ -5,6 +5,7 @@ from PIL import ImageTk, Image
 import psycopg2
 
 id_list = list()
+id_list.append(None)
 
 #function to search all the game with a title
 def search_games():
@@ -15,6 +16,11 @@ def search_games():
     tempcur = select_from_table("game", attribute, input)
 
     del id_list[:]
+    if (tempcur==None):
+        
+        id_list.append(None)
+        return
+    
     new_line = False
     for (game_id,title,year,developer,publisher) in tempcur:
         id_list.append(game_id)
@@ -52,7 +58,7 @@ def show_games():
         new_line = True
     text_select.config(state=DISABLED)
 
-#function to show game requirements at click
+#function to show game requirements and poster at click
 def callback(event):
     line_start = text_select.index("@%s,%s linestart" % (event.x, event.y))
     line_end = text_select.index("%s lineend" % line_start)
@@ -60,8 +66,11 @@ def callback(event):
     text_select.tag_add("highlight", line_start, line_end)
     text_select.tag_configure("highlight", background="bisque")
     
+    #part that shows the requirements
     text_req_select.config(state='normal')
     game_id = id_list[(int(float(line_start))-1)]
+    if (game_id==None):
+        return
     tempcur = select_requirements(game_id)
     text_req_select.delete('1.0', END)
     for tuple in tempcur:
@@ -69,6 +78,16 @@ def callback(event):
         text_req_select.insert(INSERT, "\n")
     text_req_select.config(state=DISABLED)
     
+    #part that changes the poster
+    tempcur = select_posters(game_id)
+    for tuple in tempcur:
+        path = ("posters/%s.jpg"%(tuple))
+    img = Image.open(path) 
+    img = img.resize((img_width, img_height), Image.ANTIALIAS)  
+    global image
+    image = ImageTk.PhotoImage(img) 
+    global image_on_canvas
+    canvas.itemconfig(image_on_canvas, image = image)
     
     
 #GUI functions 
@@ -86,7 +105,6 @@ center_frame = Frame(frame)
 center_frame.grid(row=1)
 bottom_frame = Frame(frame)
 bottom_frame.grid(row=2)
-
 
 
 # for game search
@@ -115,7 +133,6 @@ label_review = Label(bottom_frame, text="Review:")
 entry_review = Entry(bottom_frame, width = 70)
 
 
-
 #grid positioning
 #top frame
 button_search.grid(padx=(5), pady=(5), row=0,column=0)
@@ -137,7 +154,6 @@ label_review.grid(padx=(5,0), pady=(5), row=0, column=7)
 entry_review.grid(padx=(0,5), pady=(5), row=0, column=8)
 
 
-
 #for image
 text_req_select.update()
 img_width = int(text_req_select.winfo_width()/2)
@@ -145,10 +161,10 @@ img_height = int(7*text_select.winfo_height()/8)
 
 canvas = Canvas(center_frame, width = img_width , height = img_height)      
 canvas.grid(pady=(10,0),row=0, column=2)   
-img = Image.open("posters/argo.jpg") 
+img = Image.open("posters/Welcome.jpg") 
 img = img.resize((img_width, img_height), Image.ANTIALIAS)  
 image = ImageTk.PhotoImage(img)
-canvas.create_image(0,0, anchor=NW, image=image)
+image_on_canvas = canvas.create_image(0,0, anchor=NW, image=image)
 
 
 text_select.insert(INSERT, "Welcome!")

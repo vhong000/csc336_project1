@@ -23,7 +23,7 @@ def generate_game_data():
 	genres = ['Action-Adventure', 'Action', 'Adventure', 'Card Battle', 'Casual', 'Puzzle', 'Rhythm', 'Role-Playing', 'Simulation', 'Strategy', 'Racing']
 
 	# list of games
-	titles = ['Counter-Strike', 'Dota 2', 'League of Legends', 'FIFA', 'Grand Theft Auto', 'Rocket League', 'PubG', 'Burnout', 'Pokemon', 'Pong', 'Space Invaders', 'Pac-man', 'Donkey Kong', 'Frogger', 'Tetris', 'Super Mario Bros.', 'The Legend of Zelda', 'Contra', 'Mike Tyson\'s Punch-Out!!', 'Mega Man 2', 'Wolfenstein 3D', 'Super Mario Kart', 'EarthBound', 'Chrono Trigger', 'Super Mario 64', 'BioShock', 'Portal', 'Red Dead Redemption', 'Super Meat Boy', 'Dark Souls', 'Bloodborne', 'The Witcher', 'Deus Ex', 'EverQuest', 'StarCraft', 'Half-Life', 'GoldenEye 007']
+	titles = ['Counter-Strike', 'Dota 2', 'League of Legends', 'FIFA', 'Grand Theft Auto', 'Rocket League', 'PubG', 'Burnout', 'Pokemon', 'Pong', 'Space Invaders', 'Pac-man', 'Donkey Kong', 'Frogger', 'Tetris', 'Super Mario Bros.', 'The Legend of Zelda', 'Contra', 'Mike Tysons Punch-Out!!', 'Mega Man 2', 'Wolfenstein 3D', 'Super Mario Kart', 'EarthBound', 'Chrono Trigger', 'Super Mario 64', 'BioShock', 'Portal', 'Red Dead Redemption', 'Super Meat Boy', 'Dark Souls', 'Bloodborne', 'The Witcher', 'Deus Ex', 'EverQuest', 'StarCraft', 'Half-Life', 'GoldenEye 007']
 
 	# list of descriptions
 	descriptions = ['Wow what a great game!!', 'A damn good game right here', 'It\'s ok', 'Cool game full of action', 'Eyy that\'s pretty good', 'Wow Mario can jump really high!!', 'Most horrifying game of the year', 'Best seller in 5 states', 'Next level realism', 'Revolutionary game mechanics']
