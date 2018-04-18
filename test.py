@@ -119,18 +119,19 @@ combobox_tag = ttk.Combobox(top_frame, state="readonly", values=("title", "year"
 combobox_tag.set("title")
 entry_input = Entry(top_frame, width=50)
 button_show = Button(top_frame, text="Show all games", command=show_games)
-text_select = Text(center_frame, width=80, height=20)
+text_select = Text(center_frame, width=80, height=20, cursor='arrow')
+
 
 
 # for requirements
 text_select.bind("<Button-1>", callback)
-text_req_select = Text(center_frame, width=60, height=5)
+text_req_select = Text(center_frame, width=60, height=4, cursor='arrow')
 
 
 # for reviews
 button_review = Button(bottom_frame, text="Review", command=review_game)
 label_gameid = Label(bottom_frame, text="Game Id:")
-entry_gameid = Text(bottom_frame,width = 4, height=1, state='disabled')
+entry_gameid = Text(bottom_frame,width = 4, height=1, state='disabled', cursor='arrow')
 label_memid = Label(bottom_frame, text="Member Id:")
 entry_memid = Entry(bottom_frame, width = 4)
 label_score = Label(bottom_frame, text="Review Score:")
@@ -146,8 +147,8 @@ combobox_tag.grid(padx=(5), pady=(5), row=0,column=1)
 entry_input.grid(padx=(5), pady=(5), row=0,column=3)
 button_show.grid(padx=(5), pady=(5), row=0, column=4)
 #center frame 
-text_select.grid(padx=(10,0), pady=(10,0),row=0,column=0, rowspan=2)
-text_req_select.grid(padx=(10), pady=(10),row=1,column=2)
+text_select.grid(padx=(10,0), pady=(0,0),row=0,column=0, rowspan=2)
+text_req_select.grid(padx=(10), pady=(10),row=1,column=3)
 #bottom frame
 button_review.grid(padx=(5), pady=(5), row=0, column=0)
 label_gameid.grid(padx=(5,0), pady=(5), row=0, column=1)
@@ -160,13 +161,22 @@ label_review.grid(padx=(5,0), pady=(5), row=0, column=7)
 entry_review.grid(padx=(0,5), pady=(5), row=0, column=8)
 
 
+
+#for scrollbar
+text_select.update()
+scroll_height = int(10*text_select.winfo_height()/24)
+vsb = Scrollbar(center_frame, orient="vertical", command=text_select.yview)
+vsb.grid(row=0, column=2, rowspan=2, ipady = scroll_height)
+text_select.configure(yscrollcommand=vsb.set)
+
+
 #for image
 text_req_select.update()
 img_width = int(text_req_select.winfo_width()/2)
 img_height = int(7*text_select.winfo_height()/8)
 
 canvas = Canvas(center_frame, width = img_width , height = img_height)      
-canvas.grid(pady=(10,0),row=0, column=2)   
+canvas.grid(pady=(10,0),row=0, column=3)   
 img = Image.open("posters/Welcome.jpg") 
 img = img.resize((img_width, img_height), Image.ANTIALIAS)  
 image = ImageTk.PhotoImage(img)
@@ -176,7 +186,3 @@ image_on_canvas = canvas.create_image(0,0, anchor=NW, image=image)
 text_select.insert(INSERT, "Welcome!")
 connect()
 frame.mainloop()
-
-
-
-
