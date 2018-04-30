@@ -7,6 +7,8 @@ import psycopg2
 id_list = list()
 id_list.append(None)
 
+#test#
+
 #function to search all the game with a title
 def search_games():
     text_select.config(state='normal')
