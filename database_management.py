@@ -4,7 +4,7 @@ import functions
 from generate_data import *
 import psycopg2
 
-class MyDialog:
+class Config:
     def __init__(self, parent):
         top = self.top = Toplevel(parent)
         Label(top, text="Database config").grid(row=0, columnspan=2)
@@ -43,148 +43,154 @@ class MyDialog:
         config_file.write(row)
         self.top.destroy()
 
-def delete_all_tables():
-    table_deleted = False
-    text_select.delete('1.0', END)
-    if (check_table_exists('requirements') == True):
-        drop_table('requirements')
-        text_select.insert(INSERT, "Table requirements dropped\n")
-        table_deleted = True
-    if (check_table_exists('reviews') == True):
-        drop_table('reviews')
-        text_select.insert(INSERT, "Table reviews dropped\n")
-        table_deleted = True
-    if (check_table_exists('friends') == True):
-        drop_table('friends')
-        text_select.insert(INSERT, "Table friends dropped\n")
-        table_deleted = True
-    if (check_table_exists('poster') == True):
-        drop_table('poster')
-        text_select.insert(INSERT, "Table poster dropped\n")
-        table_deleted = True
-    if (check_table_exists('admin') == True):
-        drop_table('admin')
-        text_select.insert(INSERT, "Table admin dropped\n")
-        table_deleted = True
-    if (check_table_exists('shopping_cart') == True):
-        drop_table('shopping_cart')
-        text_select.insert(INSERT, "Table shopping_cart dropped\n")
-        table_deleted = True
-    if (check_table_exists('member') == True):
-        drop_table('member')
-        text_select.insert(INSERT, "Table member dropped\n")
-        table_deleted = True
-    if (check_table_exists('game') == True):
-        drop_table('game')
-        text_select.insert(INSERT, "Table game dropped\n")
-        table_deleted = True
-    if (table_deleted == False):
-        text_select.insert(INSERT, "No Tables dropped\n")
+class Manager(Frame):
+    def delete_all_tables(self):
+        table_deleted = False
+        self.text_select.delete('1.0', END)
+        if (check_table_exists('requirements') == True):
+            drop_table('requirements')
+            self.text_select.insert(INSERT, "Table requirements dropped\n")
+            table_deleted = True
+        if (check_table_exists('reviews') == True):
+            drop_table('reviews')
+            self.text_select.insert(INSERT, "Table reviews dropped\n")
+            table_deleted = True
+        if (check_table_exists('friends') == True):
+            drop_table('friends')
+            self.text_select.insert(INSERT, "Table friends dropped\n")
+            table_deleted = True
+        if (check_table_exists('poster') == True):
+            drop_table('poster')
+            self.text_select.insert(INSERT, "Table poster dropped\n")
+            table_deleted = True
+        if (check_table_exists('admin') == True):
+            drop_table('admin')
+            self.text_select.insert(INSERT, "Table admin dropped\n")
+            table_deleted = True
+        if (check_table_exists('shopping_cart') == True):
+            drop_table('shopping_cart')
+            self.text_select.insert(INSERT, "Table shopping_cart dropped\n")
+            table_deleted = True
+        if (check_table_exists('member') == True):
+            drop_table('member')
+            self.text_select.insert(INSERT, "Table member dropped\n")
+            table_deleted = True
+        if (check_table_exists('game') == True):
+            drop_table('game')
+            self.text_select.insert(INSERT, "Table game dropped\n")
+            table_deleted = True
+        if (table_deleted == False):
+            self.text_select.insert(INSERT, "No Tables dropped\n")
 
-def generate_all_data():
-    generate_game_data()
-    generate_member_data()
-    generate_req_data()
-    text_select.delete('1.0', END)
-    text_select.insert(INSERT, "Data files generated\n")
-    
-def create_all_teble():
-    table_created = False
-    text_select.delete('1.0', END)
-    if (check_table_exists('game') == False):
-        create_game_table()
-        text_select.insert(INSERT, "Table game created\n")
-        table_created = True
-    if (check_table_exists('member') == False):
-        create_member_table()
-        text_select.insert(INSERT, "Table member created\n")
-        table_created = True
-    if (check_table_exists('shopping_cart') == False):
-        create_shopping_cart_table()
-        text_select.insert(INSERT, "Table shopping_cart created\n")
-        table_created = True
-    if (check_table_exists('admin') == False):
-        create_admin_table()
-        text_select.insert(INSERT, "Table admin created\n")
-        table_created = True
-    if (check_table_exists('poster') == False):
-        create_poster_table()
-        text_select.insert(INSERT, "Table poster created\n")
-        table_created = True
-    if (check_table_exists('friends') == False):
-        create_friends_table()
-        text_select.insert(INSERT, "Table friends created\n")
-        table_created = True
-    if (check_table_exists('reviews') == False):
-        create_reviews_table()
-        text_select.insert(INSERT, "Table reviews created\n")
-        table_created = True
-    if (check_table_exists('requirements') == False):
-        create_requirements_table()
-        text_select.insert(INSERT, "Table requirements created\n")
-        table_created = True
-    if (table_created == False):
-        text_select.insert(INSERT, "No Tables created\n")
+    def generate_all_data(self):
+        generate_game_data()
+        generate_member_data()
+        generate_req_data()
+        self.text_select.delete('1.0', END)
+        self.text_select.insert(INSERT, "Data files generated\n")
 
-def fill_tables():
-    text_select.delete('1.0', END)
-    if (check_table_exists('game') == True):
-        try:
-            fill_games()
-        except:
-            functions.conn.rollback()
-            text_select.insert(INSERT, "Table game could not be filled (duplicate key or no data file)\n")
-    else:
-        text_select.insert(INSERT, "Table game does not exist\n")
-    if (check_table_exists('member') == True):
-        try:
-            fill_members()
-        except:
-            functions.conn.rollback()
-            text_select.insert(INSERT, "Table member could not be filled (duplicate key or no data file)\n")
-    else:
-        text_select.insert(INSERT, "Table member does not exist\n")
-    if (check_table_exists('requirements') == True):
-        try:
-            fill_requirements()
-        except:
-            functions.conn.rollback()
-            text_select.insert(INSERT, "Table requirements could not be filled (duplicate key or no data file)\n")
-    else:
-        text_select.insert(INSERT, "Table requirements does not exist\n")
-    if (check_table_exists('poster') == True):
-        try:
-            fill_posters()
-        except:
-            functions.conn.rollback()
-            text_select.insert(INSERT, "Table poster could not be filled (duplicate key or no data file)\n")
-    else:
-        text_select.insert(INSERT, "Table poster does not exist\n")
-    
-    text_select.insert(INSERT, "Tables filling ended\n")
+    def create_all_teble(self):
+        table_created = False
+        self.text_select.delete('1.0', END)
+        if (check_table_exists('game') == False):
+            create_game_table()
+            self.text_select.insert(INSERT, "Table game created\n")
+            table_created = True
+        if (check_table_exists('member') == False):
+            create_member_table()
+            self.text_select.insert(INSERT, "Table member created\n")
+            table_created = True
+        if (check_table_exists('shopping_cart') == False):
+            create_shopping_cart_table()
+            self.text_select.insert(INSERT, "Table shopping_cart created\n")
+            table_created = True
+        if (check_table_exists('admin') == False):
+            create_admin_table()
+            self.text_select.insert(INSERT, "Table admin created\n")
+            table_created = True
+        if (check_table_exists('poster') == False):
+            create_poster_table()
+            self.text_select.insert(INSERT, "Table poster created\n")
+            table_created = True
+        if (check_table_exists('friends') == False):
+            create_friends_table()
+            self.text_select.insert(INSERT, "Table friends created\n")
+            table_created = True
+        if (check_table_exists('reviews') == False):
+            create_reviews_table()
+            self.text_select.insert(INSERT, "Table reviews created\n")
+            table_created = True
+        if (check_table_exists('requirements') == False):
+            create_requirements_table()
+            self.text_select.insert(INSERT, "Table requirements created\n")
+            table_created = True
+        if (table_created == False):
+            self.text_select.insert(INSERT, "No Tables created\n")
 
-frame = Tk()
-width = frame.winfo_screenwidth()/2
-height = frame.winfo_screenheight()/2
-frame.title("PIPE database manager")
-frame.geometry("%dx%d"%(width,height))
-top_frame = Frame(frame)
-top_frame.grid()
+    def fill_tables(self):
+        self.text_select.delete('1.0', END)
+        if (check_table_exists('game') == True):
+            try:
+                fill_games()
+            except:
+                functions.conn.rollback()
+                self.text_select.insert(INSERT, "Table game could not be filled (duplicate key or no data file)\n")
+        else:
+            self.text_select.insert(INSERT, "Table game does not exist\n")
+        if (check_table_exists('member') == True):
+            try:
+                fill_members()
+            except:
+                functions.conn.rollback()
+                self.text_select.insert(INSERT, "Table member could not be filled (duplicate key or no data file)\n")
+        else:
+            self.text_select.insert(INSERT, "Table member does not exist\n")
+        if (check_table_exists('requirements') == True):
+            try:
+                fill_requirements()
+            except:
+                functions.conn.rollback()
+                self.text_select.insert(INSERT, "Table requirements could not be filled (duplicate key or no data file)\n")
+        else:
+            self.text_select.insert(INSERT, "Table requirements does not exist\n")
+        if (check_table_exists('poster') == True):
+            try:
+                fill_posters()
+            except:
+                functions.conn.rollback()
+                self.text_select.insert(INSERT, "Table poster could not be filled (duplicate key or no data file)\n")
+        else:
+            self.text_select.insert(INSERT, "Table poster does not exist\n")
+
+        self.text_select.insert(INSERT, "Tables filling ended\n")
+
+    def __init__(self, master = None):
+        width = root.winfo_screenwidth() / 2
+        height = root.winfo_screenheight() / 2
+        root.title("PIPE database manager")
+        root.geometry("%dx%d" % (width, height))
+        top_frame = Frame(root)
+        top_frame.grid()
+
+        button_delete_tables = Button(top_frame, text="Delete Tables", command=self.delete_all_tables)
+        button_delete_tables.grid(row=0, column=0)
+        button_generate_data = Button(top_frame, text="Generate Data", command=self.generate_all_data)
+        button_generate_data.grid(row=0, column=1)
+        button_generate_data = Button(top_frame, text="Create Tables", command=self.create_all_teble)
+        button_generate_data.grid(row=0, column=2)
+        button_generate_data = Button(top_frame, text="Fill Tables", command=self.fill_tables)
+        button_generate_data.grid(row=0, column=3)
+
+        self.text_select = Text(root, width=80, height=10)
+        self.text_select.grid(pady=(10, 100))
+
+        d = Config(root)
+        root.wait_window(d.top)
+        connect()
 
 
-button_delete_tables = Button(top_frame, text="Delete Tables", command=delete_all_tables)
-button_delete_tables.grid(row=0,column=0)
-button_generate_data = Button(top_frame, text="Generate Data", command=generate_all_data)
-button_generate_data.grid(row=0,column=1)
-button_generate_data = Button(top_frame, text="Create Tables", command=create_all_teble)
-button_generate_data.grid(row=0,column=2)
-button_generate_data = Button(top_frame, text="Fill Tables", command=fill_tables)
-button_generate_data.grid(row=0,column=3)
 
-text_select = Text(frame, width=80, height=10)
-text_select.grid(pady=(10,100))
 
-d = MyDialog(frame)
-frame.wait_window(d.top)
-connect()
-frame.mainloop()
+root = Tk()
+app = Manager(master=root)
+root.mainloop()
