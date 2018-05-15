@@ -4,6 +4,7 @@ from functions import *
 from PIL import ImageTk, Image
 import psycopg2
 
+
 class Application(Frame):
     #function to search all the game with a title
     def search_games(self):
@@ -187,6 +188,7 @@ class Application(Frame):
         self.text_select.insert(INSERT, "Welcome!")
         connect()
 
+        
 #main window
 frame = Tk()
 app = Application(master=frame)
