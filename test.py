@@ -2,8 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from functions import *
 from PIL import ImageTk, Image
-import psycopg2
-
+#import psycopg2
 
 class Application(Frame):
     #function to search all the game with a title
@@ -188,7 +187,6 @@ class Application(Frame):
         self.text_select.insert(INSERT, "Welcome!")
         connect()
 
-        
 #main window
 frame = Tk()
 app = Application(master=frame)
