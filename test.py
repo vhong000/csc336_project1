@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from functions import *
 from PIL import ImageTk, Image
+from sqlite3 import Error
 #import psycopg2
 
 class Signup_frame(Frame):
@@ -15,32 +16,39 @@ class Signup_frame(Frame):
 
         first_line = Frame(self)
         Label(first_line, text="name:").pack(side="left")
-        Entry(first_line).pack(side="left")
+        self.name_entry = Entry(first_line)
+        self.name_entry.pack(side="left")
         first_line.pack(side="top")
 
         second_line = Frame(self)
         Label(second_line, text="age:").pack(side="left")
-        Entry(second_line).pack(side="left")
+        self.age_entry = Entry(second_line)
+        self.age_entry.pack(side="left")
         second_line.pack(side="top")
-
 
         third_line = Frame(self)
         Label(third_line, text="password:").pack(side="left")
-        Entry(third_line).pack(side="left")
+        self.password_entry = Entry(third_line)
+        self.password_entry.pack(side="left")
         third_line.pack(side="top")
 
         forth_line = Frame(self)
         Label(forth_line, text="email:").pack(side="left")
-        Entry(forth_line).pack(side="left")
+        self.email_entry = Entry(forth_line)
+        self.email_entry.pack(side="left")
         forth_line.pack(side="top")
 
-
+        fifth_line = Frame(self)
+        back_button = Button(fifth_line, text="back", command=self.back).pack(side="left")
+        submit_button = Button(fifth_line, text="submit", command=self.submit).pack(side="left")
+        fifth_line.pack(side="top")
 
         last_line = Frame(self)
-        back_button = Button(last_line, text="back", command=self.back).pack(side="left")
-        submit_button = Button(last_line, text="submit", command=self.submit).pack(side="left")
+        self.var = StringVar()
+        self.var.set('')
+        self.message = Label(last_line, textvariable= self.var)
+        self.message.pack(side="top")
         last_line.pack(side="top")
-
 
     def back(self):
         top_frame.tkraise()
@@ -48,8 +56,39 @@ class Signup_frame(Frame):
         bottom_frame.tkraise()
 
     def submit(self):
-        return
+        name = self.name_entry.get()
+        if (name == ''):
+            self.var.set('name required')
+            self.message.update()
+            return
+        age = self.age_entry.get()
+        if (age == ''):
+            self.var.set('age required')
+            self.message.update()
+            return
+        balance = 100.00
+        password = self.password_entry.get()
+        if (password == ''):
+            self.var.set('password required')
+            self.message.update()
+            return
+        email = self.email_entry.get()
+        if (email == ''):
+            self.var.set('email required')
+            self.message.update()
+            return
 
+        id = select_greatest_user_id()
+        id = int(id) + 1
+        try:
+            add_member(id, name, age, balance, password, email)
+        except sqlite3.Error as e:
+            self.var.set('Unable to signup')
+            self.message.update()
+            print(e)
+
+        self.var.set(('You are now a Memeber! your id: %s' %(id)))
+        self.message.update()
 
 
 class Application(Frame):

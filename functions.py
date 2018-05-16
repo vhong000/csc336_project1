@@ -80,7 +80,7 @@ def create_game_table():
 def create_member_table():
     cur = conn.cursor()
     query = ("""CREATE TABLE member (
-    member_id VARCHAR(8) NOT NULL,
+    member_id INT NOT NULL,
     name VARCHAR(50) NOT NULL,
     age INT NOT NULL,
     balance FLOAT,
@@ -327,17 +327,22 @@ def select_requirements(game_id):
     cur = conn.cursor()
     query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE game_id = '%s'" %(game_id))
     cur.execute(query)
-    conn.commit()
     return cur
 
 def select_posters(game_id):
     cur = conn.cursor()
     query = ("Select link FROM poster WHERE game_id = '%s'" %(game_id))
     cur.execute(query)
-    conn.commit()
     return cur
-    
-    
+
+def select_greatest_user_id():
+    cur = conn.cursor()
+    query = ("Select member_id FROM member order by member_id desc")
+    cur.execute(query)
+    row = cur.fetchone()
+    return row[0]
+
+
 # temporary review function
 def insert_review(game_id, memid, score, feedback, time):
     add_review(game_id, memid, score, feedback, time)
