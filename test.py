@@ -149,11 +149,12 @@ class Login_frame(Frame):
         if (output == False):
             self.var.set('Login Fail')
             self.message.update()
-        else:
-            entry_memid.config(state='normal')
-            entry_memid.delete('1.0', END)
-            entry_memid.insert(INSERT, output)
-            entry_memid.config(state=DISABLED)
+            return
+
+        entry_memid.config(state='normal')
+        entry_memid.delete('1.0', END)
+        entry_memid.insert(INSERT, output)
+        entry_memid.config(state=DISABLED)
         menu_frame.tkraise()
 
 

@@ -164,7 +164,7 @@ def create_reviews_table():
     feedback VARCHAR(200) NOT NULL,
     time TIMESTAMP NOT NULL,
     
-    PRIMARY KEY (member_id, time),
+    PRIMARY KEY (game_id, member_id),
     CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id),
     CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id)
     );""")
