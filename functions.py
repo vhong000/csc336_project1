@@ -347,7 +347,26 @@ def select_greatest_user_id():
 def insert_review(game_id, memid, score, feedback, time):
     add_review(game_id, memid, score, feedback, time)
 
+# login 
+def login_user(email, password):
+    cur = conn.cursor()
+    query = ("Select count(1) from member where email='%s' and password='%s'" %(email, password))
+    cur.execute(query)
+    conn.commit()
+    row = cur.fetchone();
+    if (row[0] == 1):
+        query = ("select member_id from member where email='%s'" %(email));
+        cur.execute(query);
+        row = cur.fetchone();
+        mem_id = row[0];
+        return mem_id;
+    else:
+        return False;
+    #return cur
 
+
+connect();
+#login_user('Melissa5@outlook.com', 'D4QCI1EP');
 #create_reviews_table();
 #rev_time = time.ctime()
 #add_review('5', '0', float(3.5), 'it was ok', rev_time)
