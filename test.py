@@ -7,7 +7,7 @@ from sqlite3 import Error
 
 class Signup_frame(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent, width = window_width, height = window_height, bg = 'SystemButtonFace')#'SystemButtonFace')
+        Frame.__init__(self, parent, width = window_width, height = window_height, bg = '#f0f0ed')
         self.pack_propagate(0)
 
         title = Frame(self)
@@ -51,9 +51,7 @@ class Signup_frame(Frame):
         last_line.pack(side="top")
 
     def back(self):
-        top_frame.tkraise()
-        center_frame.tkraise()
-        bottom_frame.tkraise()
+        menu_frame.tkraise()
 
     def submit(self):
         name = self.name_entry.get()
@@ -198,18 +196,18 @@ class Application(Frame):
         frame.title("PIPE")
 
 
+        global menu_frame
+        menu_frame = Frame(frame)
+
         #three frames for the GUI
-        global top_frame
-        top_frame = Frame(frame)
+        top_frame = Frame(menu_frame)
         top_frame.grid(row=0)
-        global center_frame
-        center_frame = Frame(frame)
+        center_frame = Frame(menu_frame)
         center_frame.grid(row=1)
-        global bottom_frame
-        bottom_frame = Frame(frame)
+        bottom_frame = Frame(menu_frame)
         bottom_frame.grid(row=2)
 
-
+        menu_frame.grid(row = 0)
 
 
 
@@ -301,11 +299,10 @@ class Application(Frame):
         window_width = frame.winfo_reqwidth()
         global signup_frame
         signup_frame = Signup_frame(parent=frame)
-        signup_frame.grid(row=0, rowspan=3)
+        signup_frame.grid(row=0)
 
-        top_frame.tkraise()
-        center_frame.tkraise()
-        bottom_frame.tkraise()
+        menu_frame.tkraise()
+
 
 
 
