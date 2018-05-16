@@ -1,12 +1,13 @@
 import csv
 import time
 import psycopg2
+import sqlite3
 #from config import *
 
 #connect and get cursor
-#try:
-#conn = psycopg2.connect(**config)
+
 def connect():
+    '''
     with open('config.csv', 'r') as config_data:
         reader = csv.reader(config_data)
         next(config_data)
@@ -19,11 +20,18 @@ def connect():
                 } 
     global conn
     conn = psycopg2.connect(**config)
-#except:
-#    print "I am unable to connect to the database"
-#try: 
-#except:
-#    print "I can't drop our test database!"
+    '''
+    try:
+        global conn
+        conn = sqlite3.connect('SQLite3.db')
+        cursor = conn.cursor()
+        cursor.execute("""PRAGMA foreign_keys = ON;""")
+
+
+    except sqlite3.Error as e:
+        print(e)
+    return None;
+
 
 #function names are self explanatory
 #query in each function is a string that will be passed to cursors execute() function
@@ -31,7 +39,7 @@ def connect():
 
 def check_table_exists(tablename):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '%s'" %(tablename))
+    cur.execute("SELECT COUNT(*) FROM sqlite_master WHERE name = '%s'" %(tablename))  #FROM information_schema.tables WHERE table_name = '%s'
     if cur.fetchone()[0] == 1:
         cur.close()
         return True
@@ -72,7 +80,7 @@ def create_game_table():
 def create_member_table():
     cur = conn.cursor()
     query = ("""CREATE TABLE member (
-    member_id VARCHAR(8) NOT NULL,
+    member_id INT NOT NULL,
     name VARCHAR(50) NOT NULL,
     age INT NOT NULL,
     balance FLOAT,
@@ -250,7 +258,7 @@ def fill_games():
         reader = csv.reader(games)
         next(games)
         for row in reader:
-            cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            cur.execute("INSERT INTO game (game_id,title,year,developer,publisher,rating,genre,price,description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             row
             )
     conn.commit()
@@ -263,7 +271,7 @@ def fill_members():
         reader = csv.reader(members)
         next(members)
         for row in reader:
-            cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (%s, %s, %s, %s, %s, %s)",
+            cur.execute("INSERT INTO member (member_id, name, age, balance, password, email) VALUES (?, ?, ?, ?, ?, ?)",
             row
             )
     conn.commit()
@@ -275,7 +283,7 @@ def fill_requirements():
         reader = csv.reader(reqs)
         next(reqs)
         for row in reader:
-            cur.execute("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES (%s, %s, %s, %s)",
+            cur.execute("INSERT INTO requirements (game_id, min_cpu, min_storage, min_ram) VALUES (?, ?, ?, ?)",
             row
             )
     conn.commit()
@@ -308,7 +316,8 @@ def select_from_table(table, attribute, value):
             query = ("Select game_id,title,year,developer,publisher from %s where %s = '%s'" %(table, attribute, value))
             cur.execute(query)
     else:
-        query = ("Select game_id,title,year,developer,publisher from %s where UPPER(%s) ~ UPPER('%s')" %(table, attribute, value))
+        query = ("Select game_id,title,year,developer,publisher from %s where %s = '%s' COLLATE NOCASE" %(table, attribute, value))
+                 #UPPER(%s) ~ UPPER('%s') %(table, attribute, value))
         cur.execute(query)
     
     conn.commit()
@@ -318,20 +327,25 @@ def select_requirements(game_id):
     cur = conn.cursor()
     query = ("Select title,year,min_cpu,min_storage,min_ram FROM (game NATURAL JOIN requirements) WHERE game_id = '%s'" %(game_id))
     cur.execute(query)
-    conn.commit()
     return cur
 
 def select_posters(game_id):
     cur = conn.cursor()
     query = ("Select link FROM poster WHERE game_id = '%s'" %(game_id))
     cur.execute(query)
-    conn.commit()
     return cur
-    
-    
+
+def select_greatest_user_id():
+    cur = conn.cursor()
+    query = ("Select member_id FROM member order by member_id desc")
+    cur.execute(query)
+    row = cur.fetchone()
+    return row[0]
+
+
 # temporary review function
 def insert_review(game_id, memid, score, feedback, time):
-    add_review(game_id, memid, score, feedback, time);
+    add_review(game_id, memid, score, feedback, time)
 
 
 #create_reviews_table();

@@ -2,7 +2,8 @@ from tkinter import *
 from functions import *
 import functions
 from generate_data import *
-import psycopg2
+#import psycopg2
+#import sqlite3
 
 class Config:
     def __init__(self, parent):
@@ -184,8 +185,8 @@ class Manager(Frame):
         self.text_select = Text(root, width=80, height=10)
         self.text_select.grid(pady=(10, 100))
 
-        d = Config(root)
-        root.wait_window(d.top)
+        #d = Config(root)
+        #root.wait_window(d.top)
         connect()
 
 

@@ -2,7 +2,93 @@ from tkinter import *
 from tkinter import ttk
 from functions import *
 from PIL import ImageTk, Image
-import psycopg2
+from sqlite3 import Error
+#import psycopg2
+
+class Signup_frame(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent, width = window_width, height = window_height, bg = 'SystemButtonFace')#'SystemButtonFace')
+        self.pack_propagate(0)
+
+        title = Frame(self)
+        Label(title, text="Signup as a Member").pack(side="top")
+        title.pack(side='top')
+
+        first_line = Frame(self)
+        Label(first_line, text="name:").pack(side="left")
+        self.name_entry = Entry(first_line)
+        self.name_entry.pack(side="left")
+        first_line.pack(side="top")
+
+        second_line = Frame(self)
+        Label(second_line, text="age:").pack(side="left")
+        self.age_entry = Entry(second_line)
+        self.age_entry.pack(side="left")
+        second_line.pack(side="top")
+
+        third_line = Frame(self)
+        Label(third_line, text="password:").pack(side="left")
+        self.password_entry = Entry(third_line)
+        self.password_entry.pack(side="left")
+        third_line.pack(side="top")
+
+        forth_line = Frame(self)
+        Label(forth_line, text="email:").pack(side="left")
+        self.email_entry = Entry(forth_line)
+        self.email_entry.pack(side="left")
+        forth_line.pack(side="top")
+
+        fifth_line = Frame(self)
+        back_button = Button(fifth_line, text="back", command=self.back).pack(side="left")
+        submit_button = Button(fifth_line, text="submit", command=self.submit).pack(side="left")
+        fifth_line.pack(side="top")
+
+        last_line = Frame(self)
+        self.var = StringVar()
+        self.var.set('')
+        self.message = Label(last_line, textvariable= self.var)
+        self.message.pack(side="top")
+        last_line.pack(side="top")
+
+    def back(self):
+        top_frame.tkraise()
+        center_frame.tkraise()
+        bottom_frame.tkraise()
+
+    def submit(self):
+        name = self.name_entry.get()
+        if (name == ''):
+            self.var.set('name required')
+            self.message.update()
+            return
+        age = self.age_entry.get()
+        if (age == ''):
+            self.var.set('age required')
+            self.message.update()
+            return
+        balance = 100.00
+        password = self.password_entry.get()
+        if (password == ''):
+            self.var.set('password required')
+            self.message.update()
+            return
+        email = self.email_entry.get()
+        if (email == ''):
+            self.var.set('email required')
+            self.message.update()
+            return
+
+        id = select_greatest_user_id()
+        id = int(id) + 1
+        try:
+            add_member(id, name, age, balance, password, email)
+        except sqlite3.Error as e:
+            self.var.set('Unable to signup')
+            self.message.update()
+            print(e)
+
+        self.var.set(('You are now a Memeber! your id: %s' %(id)))
+        self.message.update()
 
 
 class Application(Frame):
@@ -31,6 +117,12 @@ class Application(Frame):
         self.text_select.config(state=DISABLED)
 
 
+    #function to signup
+    def signup(self):
+        #signup_window = Signup(frame)
+        #frame.wait_window(signup_window)
+        signup_frame.tkraise()
+        return
 
     #function to review game
     def review_game(self):
@@ -105,13 +197,21 @@ class Application(Frame):
         #frame.geometry("%dx%d"%(width,height))
         frame.title("PIPE")
 
+
         #three frames for the GUI
+        global top_frame
         top_frame = Frame(frame)
         top_frame.grid(row=0)
+        global center_frame
         center_frame = Frame(frame)
         center_frame.grid(row=1)
+        global bottom_frame
         bottom_frame = Frame(frame)
         bottom_frame.grid(row=2)
+
+
+
+
 
 
         # for game search
@@ -140,6 +240,11 @@ class Application(Frame):
         self.label_review = Label(bottom_frame, text="Review:")
         self.entry_review = Entry(bottom_frame, width = 70)
 
+        # for signup
+        self.button_signup = Button(top_frame, text="Signup", command=self.signup)
+
+
+
 
         #grid positioning
         #top frame
@@ -147,6 +252,7 @@ class Application(Frame):
         self.combobox_tag.grid(padx=(5), pady=(5), row=0,column=1)
         self.entry_input.grid(padx=(5), pady=(5), row=0,column=3)
         self.button_show.grid(padx=(5), pady=(5), row=0, column=4)
+        self.button_signup.grid(padx=(400, 5), pady=(5), row=0, column=6)
         #center frame
         self.text_select.grid(padx=(10,0), pady=(0,0),row=0,column=0, rowspan=2)
         self.text_req_select.grid(padx=(10), pady=(10),row=1,column=3)
@@ -188,7 +294,21 @@ class Application(Frame):
         self.text_select.insert(INSERT, "Welcome!")
         connect()
 
-        
+        frame.update()
+        global window_height
+        window_height = frame.winfo_height()
+        global window_width
+        window_width = frame.winfo_reqwidth()
+        global signup_frame
+        signup_frame = Signup_frame(parent=frame)
+        signup_frame.grid(row=0, rowspan=3)
+
+        top_frame.tkraise()
+        center_frame.tkraise()
+        bottom_frame.tkraise()
+
+
+
 #main window
 frame = Tk()
 app = Application(master=frame)
