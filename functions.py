@@ -169,6 +169,10 @@ def create_reviews_table():
     CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id)
     );""")
     cur.execute(query)
+    cur.execute("""CREATE TRIGGER reviews_trig AFTER insert ON reviews
+                      BEGIN
+                      update reviews SET time = datetime('now') WHERE game_id = NEW.game_id  and member_id = NEW.member_id;
+                      END;""")
     print("table reviews created")
     conn.commit()
     cur.close()
