@@ -164,11 +164,15 @@ def create_reviews_table():
     feedback VARCHAR(200) NOT NULL,
     time TIMESTAMP NOT NULL,
     
-    PRIMARY KEY (member_id, time),
+    PRIMARY KEY (game_id, member_id),
     CONSTRAINT no_game FOREIGN KEY (game_id) REFERENCES game(game_id),
     CONSTRAINT no_member FOREIGN KEY (member_id) REFERENCES member(member_id)
     );""")
     cur.execute(query)
+    cur.execute("""CREATE TRIGGER reviews_trig AFTER insert ON reviews
+                      BEGIN
+                      update reviews SET time = datetime('now') WHERE game_id = NEW.game_id  and member_id = NEW.member_id;
+                      END;""")
     print("table reviews created")
     conn.commit()
     cur.close()
@@ -342,10 +346,37 @@ def select_greatest_user_id():
     row = cur.fetchone()
     return row[0]
 
+def select_email(email):
+    cur = conn.cursor()
+    query = ("Select count(1) from member where email='%s'" %(email))
+    cur.execute(query)
+    row = cur.fetchone()
+    if (row[0] == 1):
+        return True
+    else:
+        return False
+
 
 # temporary review function
 def insert_review(game_id, memid, score, feedback, time):
     add_review(game_id, memid, score, feedback, time)
+
+#login
+def login_user(email, password):
+    cur = conn.cursor()
+    query = ("Select count(1) from member where email='%s' and password='%s'" %(email, password))
+    cur.execute(query)
+    conn.commit()
+    row = cur.fetchone();
+    if (row[0] == 1):
+        query = ("select member_id from member where email='%s'" %(email));
+        cur.execute(query);
+        row = cur.fetchone();
+        mem_id = row[0];
+        return mem_id;
+    else:
+        return False;
+    #return cur
 
 
 #create_reviews_table();

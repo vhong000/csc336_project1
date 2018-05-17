@@ -7,7 +7,11 @@ from sqlite3 import Error
 
 class Signup_frame(Frame):
     def __init__(self, parent):
+<<<<<<< HEAD
         Frame.__init__(self, parent, width = window_width, height = window_height, bg = 'yellow')#'SystemButtonFace')
+=======
+        Frame.__init__(self, parent, width = window_width, height = window_height, bg = '#f0f0ed')
+>>>>>>> master
         self.pack_propagate(0)
 
         title = Frame(self)
@@ -51,9 +55,7 @@ class Signup_frame(Frame):
         last_line.pack(side="top")
 
     def back(self):
-        top_frame.tkraise()
-        center_frame.tkraise()
-        bottom_frame.tkraise()
+        menu_frame.tkraise()
 
     def submit(self):
         name = self.name_entry.get()
@@ -78,6 +80,13 @@ class Signup_frame(Frame):
             self.message.update()
             return
 
+        email_exist = select_email(email)
+        if (email_exist == 1):
+            self.var.set('email already used(')
+            self.message.update()
+            return
+
+
         id = select_greatest_user_id()
         id = int(id) + 1
         try:
@@ -89,6 +98,70 @@ class Signup_frame(Frame):
 
         self.var.set(('You are now a Memeber! your id: %s' %(id)))
         self.message.update()
+
+class Login_frame(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent, width = window_width, height = window_height, bg = '#f0f0ed')
+        self.pack_propagate(0)
+
+        title = Frame(self)
+        Label(title, text="Login Page").pack(side="top")
+        title.pack(side='top')
+
+        forth_line = Frame(self)
+        Label(forth_line, text="email:").pack(side="left")
+        self.email_entry = Entry(forth_line)
+        self.email_entry.pack(side="left")
+        forth_line.pack(side="top")
+
+        third_line = Frame(self)
+        Label(third_line, text="password:").pack(side="left")
+        self.password_entry = Entry(third_line)
+        self.password_entry.pack(side="left")
+        third_line.pack(side="top")
+
+        fifth_line = Frame(self)
+        back_button = Button(fifth_line, text="back", command=self.back).pack(side="left")
+        submit_button = Button(fifth_line, text="login", command=self.login).pack(side="left")
+        fifth_line.pack(side="top")
+
+        last_line = Frame(self)
+        self.var = StringVar()
+        self.var.set('')
+        self.message = Label(last_line, textvariable= self.var)
+        self.message.pack(side="top")
+        last_line.pack(side="top")
+
+
+    def back(self):
+        menu_frame.tkraise()
+
+    def login(self):
+        email = self.email_entry.get()
+        if (email == ''):
+            self.var.set('email required')
+            self.message.update()
+            return
+
+        password = self.password_entry.get()
+        if (password == ''):
+            self.var.set('password required')
+            self.message.update()
+            return
+
+        output = login_user(email, password)
+        if (output == False):
+            self.var.set('Login Fail')
+            self.message.update()
+            return
+
+        entry_memid.config(state='normal')
+        entry_memid.delete('1.0', END)
+        entry_memid.insert(INSERT, output)
+        entry_memid.config(state=DISABLED)
+        menu_frame.tkraise()
+
+
 
 
 class Application(Frame):
@@ -121,17 +194,21 @@ class Application(Frame):
     def signup(self):
         #signup_window = Signup(frame)
         #frame.wait_window(signup_window)
-        signup_frame.tkraise()
+        self.signup_frame.tkraise()
+        return
+
+    def login(self):
+        self.login_frame.tkraise()
         return
 
     #function to review game
     def review_game(self):
         gameid = int(self.entry_gameid.get("1.0", END))
-        memid = self.entry_memid.get();
+        memid = int(entry_memid.get("1.0", END))
         score = self.entry_score.get();
         gamereview = self.entry_review.get()
-        currtime = time.ctime()
-        insert_review(gameid, memid, score, gamereview, currtime);
+        #currtime = time.ctime()
+        insert_review(gameid, memid, score, gamereview, 0);
 
     #function to show all games in the database
     def show_games(self):
@@ -198,20 +275,18 @@ class Application(Frame):
         frame.title("PIPE")
 
 
+        global menu_frame
+        menu_frame = Frame(frame)
+        menu_frame.grid(row=0)
+
+
         #three frames for the GUI
-        global top_frame
-        top_frame = Frame(frame)
+        top_frame = Frame(menu_frame)
         top_frame.grid(row=0)
-        global center_frame
-        center_frame = Frame(frame)
+        center_frame = Frame(menu_frame)
         center_frame.grid(row=1)
-        global bottom_frame
-        bottom_frame = Frame(frame)
+        bottom_frame = Frame(menu_frame)
         bottom_frame.grid(row=2)
-
-
-
-
 
 
         # for game search
@@ -222,25 +297,24 @@ class Application(Frame):
         self.button_show = Button(top_frame, text="Show all games", command=self.show_games)
         self.text_select = Text(center_frame, width=80, height=20, cursor='arrow')
 
-
-
         # for requirements
         self.text_select.bind("<Button-1>", self.callback)
         self.text_req_select = Text(center_frame, width=60, height=4, cursor='arrow')
-
 
         # for reviews
         self.button_review = Button(bottom_frame, text="Review", command=self.review_game)
         self.label_gameid = Label(bottom_frame, text="Game Id:")
         self.entry_gameid = Text(bottom_frame,width = 4, height=1, state='disabled', cursor='arrow')
         self.label_memid = Label(bottom_frame, text="Member Id:")
-        self.entry_memid = Entry(bottom_frame, width = 4)
+        global entry_memid
+        entry_memid = Text(bottom_frame, width = 4, height=1, state='disabled', cursor='arrow')
         self.label_score = Label(bottom_frame, text="Review Score:")
         self.entry_score = Entry(bottom_frame, width = 4)
         self.label_review = Label(bottom_frame, text="Review:")
         self.entry_review = Entry(bottom_frame, width = 70)
 
         # for signup
+        self.button_login = Button(top_frame, text="Login", command=self.login)
         self.button_signup = Button(top_frame, text="Signup", command=self.signup)
 
 
@@ -252,7 +326,8 @@ class Application(Frame):
         self.combobox_tag.grid(padx=(5), pady=(5), row=0,column=1)
         self.entry_input.grid(padx=(5), pady=(5), row=0,column=3)
         self.button_show.grid(padx=(5), pady=(5), row=0, column=4)
-        self.button_signup.grid(padx=(400, 5), pady=(5), row=0, column=6)
+        self.button_login.grid(padx=(300, 5), pady=(5), row=0, column=6)
+        self.button_signup.grid(padx=(5), pady=(5), row=0, column=7)
         #center frame
         self.text_select.grid(padx=(10,0), pady=(0,0),row=0,column=0, rowspan=2)
         self.text_req_select.grid(padx=(10), pady=(10),row=1,column=3)
@@ -261,7 +336,7 @@ class Application(Frame):
         self.label_gameid.grid(padx=(5,0), pady=(5), row=0, column=1)
         self.entry_gameid.grid(padx=(0,5), pady=(5), row=0, column=2)
         self.label_memid.grid(padx=(5,0), pady=(5), row=0, column=3)
-        self.entry_memid.grid(padx=(0,5), pady=(5), row=0, column=4)
+        entry_memid.grid(padx=(0,5), pady=(5), row=0, column=4)
         self.label_score.grid(padx=(5,0), pady=(5), row=0, column=5)
         self.entry_score.grid(padx=(0,5), pady=(5), row=0, column=6)
         self.label_review.grid(padx=(5,0), pady=(5), row=0, column=7)
@@ -294,18 +369,21 @@ class Application(Frame):
         self.text_select.insert(INSERT, "Welcome!")
         connect()
 
-        frame.update()
+        menu_frame.update()
         global window_height
-        window_height = frame.winfo_height()
+        window_height = menu_frame.winfo_reqheight()
         global window_width
-        window_width = frame.winfo_reqwidth()
-        global signup_frame
-        signup_frame = Signup_frame(parent=frame)
-        signup_frame.grid(row=0, rowspan=3)
+        window_width = menu_frame.winfo_reqwidth()
 
-        top_frame.tkraise()
-        center_frame.tkraise()
-        bottom_frame.tkraise()
+
+        self.signup_frame = Signup_frame(parent=frame)
+        self.signup_frame.grid(row=0)
+
+        self.login_frame = Login_frame(parent=frame)
+        self.login_frame.grid(row=0)
+
+        menu_frame.tkraise()
+
 
 
 
