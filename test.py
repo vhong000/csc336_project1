@@ -149,11 +149,12 @@ class Login_frame(Frame):
         if (output == False):
             self.var.set('Login Fail')
             self.message.update()
-        else:
-            entry_memid.config(state='normal')
-            entry_memid.delete('1.0', END)
-            entry_memid.insert(INSERT, output)
-            entry_memid.config(state=DISABLED)
+            return
+
+        entry_memid.config(state='normal')
+        entry_memid.delete('1.0', END)
+        entry_memid.insert(INSERT, output)
+        entry_memid.config(state=DISABLED)
         menu_frame.tkraise()
 
 
@@ -202,8 +203,8 @@ class Application(Frame):
         memid = int(entry_memid.get("1.0", END))
         score = self.entry_score.get();
         gamereview = self.entry_review.get()
-        currtime = time.ctime()
-        insert_review(gameid, memid, score, gamereview, currtime);
+        #currtime = time.ctime()
+        insert_review(gameid, memid, score, gamereview, 0);
 
     #function to show all games in the database
     def show_games(self):
