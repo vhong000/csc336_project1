@@ -1,13 +1,17 @@
+"""
+This file combines all the functions that can access nd modify the database. Both programs use this
+file to execute necessary operations on the database. If any other file would use following functions
+it first must call connect() function to create a connection to the database. SQLite3 is used as the
+database for this program, if there is any intent to use postgres there are few minor differences in the
+syntax which must corrected first. There is one trigger in this database, additional information is available
+by inspecting create_reviews_table() function
+"""
 import csv
-import time
-import psycopg2
 import sqlite3
-#from config import *
 
-#connect and get cursor
 
 def connect():
-    '''
+    '''     #this commented section can be used to connect to the postgres database.
     with open('config.csv', 'r') as config_data:
         reader = csv.reader(config_data)
         next(config_data)
@@ -69,10 +73,7 @@ def create_game_table():
     description VARCHAR(50),            
     PRIMARY KEY (game_id)
     );""")
-    try:
-        cur.execute(query)
-    except: 
-        print( "didn't execute")
+    cur.execute(query)
     print("table game created")
     conn.commit()
     cur.close()
@@ -170,9 +171,9 @@ def create_reviews_table():
     );""")
     cur.execute(query)
     cur.execute("""CREATE TRIGGER reviews_trig AFTER insert ON reviews
-                      BEGIN
-                      update reviews SET time = datetime('now') WHERE game_id = NEW.game_id  and member_id = NEW.member_id;
-                      END;""")
+                   BEGIN
+                   update reviews SET time = datetime('now') WHERE game_id = NEW.game_id  and member_id = NEW.member_id;
+                   END;""")
     print("table reviews created")
     conn.commit()
     cur.close()
@@ -356,11 +357,6 @@ def select_email(email):
     else:
         return False
 
-
-# temporary review function
-def insert_review(game_id, memid, score, feedback, time):
-    add_review(game_id, memid, score, feedback, time)
-
 #login
 def login_user(email, password):
     cur = conn.cursor()
@@ -376,9 +372,3 @@ def login_user(email, password):
         return mem_id;
     else:
         return False;
-    #return cur
-
-
-#create_reviews_table();
-#rev_time = time.ctime()
-#add_review('5', '0', float(3.5), 'it was ok', rev_time)
