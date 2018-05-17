@@ -7,7 +7,7 @@ from sqlite3 import Error
 
 class Signup_frame(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent, width = window_width, height = window_height, bg = 'SystemButtonFace')#'SystemButtonFace')
+        Frame.__init__(self, parent, width = window_width, height = window_height, bg = 'yellow')#'SystemButtonFace')
         self.pack_propagate(0)
 
         title = Frame(self)
