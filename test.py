@@ -203,8 +203,8 @@ class Application(Frame):
         memid = int(entry_memid.get("1.0", END))
         score = self.entry_score.get();
         gamereview = self.entry_review.get()
-        currtime = time.ctime()
-        insert_review(gameid, memid, score, gamereview, currtime);
+        #currtime = time.ctime()
+        insert_review(gameid, memid, score, gamereview, 0);
 
     #function to show all games in the database
     def show_games(self):
